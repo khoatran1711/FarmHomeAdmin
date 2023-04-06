@@ -1,0 +1,25 @@
+@import "../../../constants/colors.style.scss";
+
+.text-input {
+  width: 100%;
+  min-height: 26px;
+  border: 1px solid var(--Solitaire-color);
+  background: none;
+  outline: none;
+  color: var(--Solitaire-color);
+  font-family: "Intrepid";
+  margin-top: 5px;
+  margin-bottom: 5px;
+
+  &:focus {
+    border: 1px solid var(--Solitaire-color);
+    background: none;
+    outline: none;
+  }
+}
+
+.text-label {
+  color: var(--Solitaire-color);
+  font-family: "Intrepid";
+  font-size: 1.2vw;
+}
