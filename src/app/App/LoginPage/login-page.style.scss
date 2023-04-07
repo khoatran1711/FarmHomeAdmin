@@ -1,69 +1,76 @@
 @import "../../constants/colors.style.scss";
 
-.login-button {
-  align-self: center;
-  width: 30%;
-  margin-top: 5%;
-  font-family: "Intrepid";
-
-  &.button {
-    background-color: var(--Solitaire-color);
-    color: var(--TimberGreen-color);
-    &:hover {
-      background: var(--Finlandia-color);
-      color: var(--Solitaire-color);
-    }
-    &:disabled {
-      background-color: var(--Solitaire-color);
-    }
-  }
-}
-
-.page-container {
-  background: var(--TimberGreen-color);
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-}
-
-.login-banner {
-  width: 40vw;
-  height: 80vh;
-  object-fit: contain;
-}
-
-.right-content {
-  width: 30vw;
-  height: 80vh;
-  display: flex;
-  flex-direction: column;
-  .title {
+.login-page {
+  .login-button {
     align-self: center;
-    margin: 10vh 0;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    .title-name {
-      color: var(--Solitaire-color);
-      font-family: "Intrepid";
-      font-size: 2vw;
-    }
-    .title-content {
-      color: var(--Solitaire-color);
-      font-family: "Intrepid";
-      font-size: 1.4vw;
+    width: 30%;
+    margin-top: 5%;
+    font-family: "Intrepid";
+
+    &.button {
+      background-color: var(--Solitaire-color);
+      color: var(--TimberGreen-color);
+
+      &:hover {
+        background: var(--Finlandia-color);
+        color: var(--Solitaire-color);
+      }
+
+      &:disabled {
+        background-color: var(--Solitaire-color);
+      }
     }
   }
 
-  .input {
-    width: 100%;
-    height: 30%;
+  .page-container {
+    background: var(--TimberGreen-color);
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+
+  .login-banner {
+    width: 40vw;
+    height: 80vh;
+    object-fit: contain;
+  }
+
+  .right-content {
+    width: 30vw;
+    height: 80vh;
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
-    margin-bottom: 5%;
+
+    .title {
+      align-self: center;
+      margin: 10vh 0;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+
+      .title-name {
+        color: var(--Solitaire-color);
+        font-family: "Intrepid";
+        font-size: 2vw;
+      }
+
+      .title-content {
+        color: var(--Solitaire-color);
+        font-family: "Intrepid";
+        font-size: 1.4vw;
+      }
+    }
+
+    .input {
+      width: 100%;
+      height: 30%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      margin-bottom: 5%;
+    }
   }
 }

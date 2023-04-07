@@ -22,42 +22,44 @@ export const LoginPage = () => {
   const login = () => {
     authenticationService.LogIn(username, password).then((httpResult) => {
       if (httpResult?.status === HttpStatusCode.Created) {
-        globalNavigate(PageRoute.AboutPage);
+        globalNavigate(PageRoute.HomePage);
       }
     });
   };
 
   return (
-    <div className="page-container">
-      <img src={loginBackground} className="login-banner" alt="" />
-      <section className="right-content">
-        <section className="title">
-          <div className="title-name">{I18n.FARMHOME}</div>
-          <div className="title-content">{I18n.findAllYourNeeds}</div>
-        </section>
+    <div className="login-page">
+      <div className="page-container">
+        <img src={loginBackground} className="login-banner" alt="" />
+        <section className="right-content">
+          <section className="title">
+            <div className="title-name">{I18n.FARMHOME}</div>
+            <div className="title-content">{I18n.findAllYourNeeds}</div>
+          </section>
 
-        <section className="input">
-          <TextInput
-            label={I18n.username}
-            onChangeText={(e) => setUsername(e?.target?.value)}
-          />
-          <TextInput
-            label={I18n.password}
-            onChangeText={(e) => setPassword(e?.target?.value)}
-            isHidden={true}
-          />
-        </section>
+          <section className="input">
+            <TextInput
+              label={I18n.username}
+              onChangeText={(e) => setUsername(e?.target?.value)}
+            />
+            <TextInput
+              label={I18n.password}
+              onChangeText={(e) => setPassword(e?.target?.value)}
+              isHidden={true}
+            />
+          </section>
 
-        <LoadingButton
-          loading={isLoading}
-          size="medium"
-          variant="contained"
-          className="login-button button"
-          onClick={() => login()}
-        >
-          {I18n.login}
-        </LoadingButton>
-      </section>
+          <LoadingButton
+            loading={isLoading}
+            size="medium"
+            variant="contained"
+            className="login-button button"
+            onClick={() => login()}
+          >
+            {I18n.login}
+          </LoadingButton>
+        </section>
+      </div>
     </div>
   );
 };

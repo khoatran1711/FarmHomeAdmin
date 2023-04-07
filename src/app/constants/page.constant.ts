@@ -1,5 +1,6 @@
 export const PageRoute = {
-  HomePage: "/",
-  LoginPage: "/login",
+  HomePage: "/home",
+  LoginPage: "/",
   AboutPage: "/about",
+  KhoaGaPage: "/khoaga",
 };
