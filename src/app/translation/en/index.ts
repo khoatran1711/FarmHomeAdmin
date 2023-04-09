@@ -4,4 +4,13 @@ export const EN = {
   findAllYourNeeds: "Find all your needs",
   username: "Username",
   password: "Password",
+  Statistics: "Statistics",
+  Merchants: "Merchants",
+  Farmers: "Farmers",
+  News: "News",
+  Category: "Category",
+  Reports: "Reports",
+  Notification: "Notification",
+  Coupons: "Coupons",
+  Logout: "Logout",
 };

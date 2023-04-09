@@ -1,5 +1,6 @@
+import { MenuBarTitle } from "../../../constants/menu-bar.constant";
 import "./menu-bar.style.scss";
-import React from 'react';
+
 
 interface MenuBarProps {
     label?: string;
@@ -12,15 +13,15 @@ export const MenuBar = (props?: MenuBarProps) => {
     return (
         <div className="menu-bar">
             <ul>
-                <li>Statistics</li>
-                <li>Merchants</li>
-                <li>Farmers</li>
-                <li>News</li>
-                <li>Category</li>
-                <li>Reports</li>
-                <li>Notification</li>
-                <li>Coupons</li>
-                <li>Logout</li>
+                <li>{MenuBarTitle.Statistics}</li>
+                <li>{MenuBarTitle.Merchants}</li>
+                <li>{MenuBarTitle.Farmers}</li>
+                <li>{MenuBarTitle.News}</li>
+                <li>{MenuBarTitle.Category}</li>
+                <li>{MenuBarTitle.Reports}</li>
+                <li>{MenuBarTitle.Notification}</li>
+                <li>{MenuBarTitle.Coupons}</li>
+                <li>{MenuBarTitle.Logout}</li>
             </ul>
         </div>
     );
