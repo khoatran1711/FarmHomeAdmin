@@ -1,0 +1,9 @@
+@import "../../constants/colors.style.scss";
+
+.merchant-page {
+    .page-container {
+        background: var(--TimberGreen-color);
+        width: 100vw;
+        height: 100vh;
+    }
+}

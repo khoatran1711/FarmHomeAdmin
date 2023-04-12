@@ -1,0 +1,33 @@
+@import "../../../constants/colors.style.scss";
+
+.menu-bar {
+    width: 30vw;
+    height: 80vh;
+    background: none;
+    outline: none;
+    color: var(--Solitaire-color);
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+    ul {
+        display: flex;
+        flex-direction: column;
+        margin: 5;
+        padding: 0;
+        text-decoration: none;
+        list-style-type: none;
+        font-size: 28pt;
+        font-family: "Intrepid";
+    }
+
+    li {
+        margin: 10 px 0;
+        height: 8.5vh;
+        cursor: pointer;
+    }
+
+    li:hover {
+        text-decoration: underline;
+        font-size: larger;
+    }
+}
