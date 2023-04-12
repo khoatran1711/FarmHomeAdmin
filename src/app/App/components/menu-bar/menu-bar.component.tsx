@@ -13,15 +13,15 @@ export const MenuBar = (props?: MenuBarProps) => {
     return (
         <div className="menu-bar">
             <ul>
-                <li>{MenuBarTitle.Statistics}</li>
-                <li>{MenuBarTitle.Merchants}</li>
-                <li>{MenuBarTitle.Farmers}</li>
-                <li>{MenuBarTitle.News}</li>
-                <li>{MenuBarTitle.Category}</li>
-                <li>{MenuBarTitle.Reports}</li>
-                <li>{MenuBarTitle.Notification}</li>
-                <li>{MenuBarTitle.Coupons}</li>
-                <li>{MenuBarTitle.Logout}</li>
+                <li>{MenuBarTitle.statistics}</li>
+                <li>{MenuBarTitle.merchants}</li>
+                <li>{MenuBarTitle.farmers}</li>
+                <li>{MenuBarTitle.news}</li>
+                <li>{MenuBarTitle.category}</li>
+                <li>{MenuBarTitle.reports}</li>
+                <li>{MenuBarTitle.notification}</li>
+                <li>{MenuBarTitle.coupons}</li>
+                <li>{MenuBarTitle.logout}</li>
             </ul>
         </div>
     );

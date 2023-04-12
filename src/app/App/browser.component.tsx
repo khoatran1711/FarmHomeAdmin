@@ -8,6 +8,7 @@ import { AuthenticationService } from "../services/authentication.service";
 
 import { LoginPage } from "./LoginPage";
 import { HomePage } from "./HomePage";
+import { MerchantPage } from "./MerchantPage";
 
 export const navigationRef = React.createRef<HTMLDivElement>();
 
@@ -28,6 +29,7 @@ export const Browser = () => {
         <Route path={PageRoute.LoginPage} Component={LoginPage} />
         <Route path={PageRoute.AboutPage} Component={AboutPage} />
         <Route path={PageRoute.HomePage} Component={HomePage} />
+        <Route path={PageRoute.MerchantPage} Component={MerchantPage} />
       </Routes>
     </div>
   );
