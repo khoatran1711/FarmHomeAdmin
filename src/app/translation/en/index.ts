@@ -13,4 +13,9 @@ export const EN = {
   notification: "Notification",
   coupons: "Coupons",
   logout: "Logout",
+  id: "ID",
+  avatar: "Avatar",
+  name: "Name",
+  phone: "Phone",
+  email: "Email",
 };

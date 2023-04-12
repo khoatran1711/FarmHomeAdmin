@@ -26,7 +26,7 @@ export const checkToken =
 
       if (!token) {
         dispatch(AuthenticationActions.logOut);
-        resetNavigate("/");
+        //resetNavigate("/login");
       } else {
         const valid = jwtService.validate(token);
 
@@ -34,7 +34,7 @@ export const checkToken =
           dispatch(checkToken());
         } else {
           dispatch(AuthenticationActions.logOut);
-          resetNavigate("/");
+          //resetNavigate("/login");
         }
       }
     }, interval);
