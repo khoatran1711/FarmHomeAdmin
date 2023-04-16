@@ -1,9 +1,28 @@
 @import "../../constants/colors.style.scss";
 
 .merchant-page {
+    font-family: "Intrepid";
+
     .page-container {
         background: var(--TimberGreen-color);
         width: 100vw;
         height: 100vh;
+    }
+
+    .search-bar {
+        .text-input {
+            width: 80%;
+        }
+
+        button {
+            background: var(--Solitaire-color);
+            margin-left: 5px;
+            color: var(--TimberGreen-color);
+
+            &:hover {
+                background: var(--Finlandia-color);
+                color: var(--Solitaire-color);
+            }
+        }
     }
 }
