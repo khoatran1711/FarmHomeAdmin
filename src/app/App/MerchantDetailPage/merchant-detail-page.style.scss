@@ -1,0 +1,97 @@
+@import "../../constants/colors.style.scss";
+
+.merchant-detail {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  background-color: var(--TimberGreen-color);
+
+  .right-button {
+    width: 3vw;
+    height: 3vw;
+    margin: 2vw;
+    align-self: flex-end;
+    cursor: pointer;
+  }
+
+  .merchant-info {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+
+    .image {
+      margin-right: 10vw;
+
+      .image-border {
+        width: 15vw;
+        height: 15vw;
+        border: 1px solid var(--Solitaire-color);
+        border-radius: 1000px;
+      }
+
+      .image-container {
+        width: 15vw;
+        height: 15vw;
+        overflow: hidden;
+        background: red;
+        border-radius: 1000px;
+        margin-top: -16vw;
+        margin-left: 1vw;
+
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+
+    .info {
+      padding-left: 2vw;
+      border-left: 1px solid var(--Solitaire-color);
+      .label {
+        color: var(--Solitaire-color);
+        font-family: "Intrepid";
+        &.big {
+          font-size: 1.5vw;
+        }
+        &.small {
+          font-size: 1.2vw;
+        }
+      }
+    }
+  }
+
+  .content {
+    align-self: center;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 8%;
+    margin-top: 30px;
+
+    .label {
+      color: var(--Solitaire-color);
+      font-family: "Intrepid";
+
+      &.parent {
+        font-size: 1.3vw;
+      }
+
+      &.child {
+        color: var(--Solitaire-color);
+        font-family: "Intrepid";
+        font-size: 1vw;
+        margin-left: 2vw;
+        margin-bottom: 10px;
+        margin-top: 10px;
+      }
+    }
+
+    .transaction-content {
+      margin-left: 2vw;
+    }
+  }
+}

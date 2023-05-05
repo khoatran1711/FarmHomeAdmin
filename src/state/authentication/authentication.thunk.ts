@@ -4,6 +4,7 @@ import { Action, ThunkAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "../../domain/store";
 import { JwtService } from "../../services/jwt.service";
 import { resetNavigate } from "../../app/utilities/navigation.utilities";
+import { PageRoute } from "../../app/constants";
 
 const CHECK_TOKEN_INTERVAL = 30000;
 
@@ -22,11 +23,12 @@ export const checkToken =
 
     setTimeout(() => {
       const state = getState();
-      const token = AuthenticationSelectors.tokenSelector(state);
+      const token = localStorage.getItem("token");
+      //const token = AuthenticationSelectors.tokenSelector(state);
 
       if (!token) {
         dispatch(AuthenticationActions.logOut);
-        resetNavigate("/");
+        resetNavigate(PageRoute.LoginPage);
       } else {
         const valid = jwtService.validate(token);
 
@@ -34,7 +36,7 @@ export const checkToken =
           dispatch(checkToken());
         } else {
           dispatch(AuthenticationActions.logOut);
-          resetNavigate("/");
+          resetNavigate(PageRoute.LoginPage);
         }
       }
     }, interval);

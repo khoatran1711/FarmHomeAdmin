@@ -30,10 +30,12 @@ export class AuthenticationService {
     return this.httpService
       .post<LoginRequest, LoginResponse>(urlRequest, loginRequest)
       .then((httpResult) => {
-        httpResult?.data?.accessToken &&
+        if (httpResult?.data?.accessToken) {
           this.store.dispatch(
             AuthenticationActions.logIn(httpResult?.data?.accessToken)
           );
+          localStorage.setItem("token", httpResult?.data?.accessToken);
+        }
 
         this.store.dispatch(AuthenticationActions.setLoading(false));
         const status = httpResult.status;

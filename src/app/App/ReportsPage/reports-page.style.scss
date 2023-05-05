@@ -1,0 +1,181 @@
+@import "../../constants/colors.style.scss";
+
+.reports-page {
+  background: var(--TimberGreen-color);
+
+  .page-container {
+    background: var(--TimberGreen-color);
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+
+    .left-content {
+      margin: 15px;
+
+      .label {
+        font-size: 2vw;
+        color: var(--Solitaire-color);
+        font-family: "Intrepid";
+      }
+    }
+
+    .reports {
+      flex: 1;
+      height: 100%;
+      overflow-y: overlay;
+      padding-top: 2vw;
+      padding-left: 3%;
+      padding-right: 3%;
+
+      .button-choose {
+        font-size: small;
+        height: 30px;
+        margin-left: 2vw;
+        color: var(--TimberGreen-color);
+        background-color: var(--Solitaire-color);
+      }
+
+      .button-choose:hover {
+        background-color: var(--Finlandia-color);
+        color: var(--Solitaire-color);
+      }
+
+      .report-card-title {
+        width: 100%;
+        height: 48px;
+        background: var(--SpanishGreen-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+
+        .title {
+          font-size: 1.3vw;
+          font-weight: 600;
+          color: var(--Solitaire-color);
+          padding-left: 3vw;
+        }
+
+        .small-title {
+          font-size: 1vw;
+          font-weight: 600;
+          color: var(--Solitaire-color);
+          padding-right: 3vw;
+        }
+      }
+
+      .report-card-content {
+        margin-top: 2px;
+        width: 94%;
+        padding-left: 2%;
+        padding-right: 2%;
+        padding-bottom: 1vw;
+        align-self: end;
+        background: var(--BlueSmoke-color);
+        display: flex;
+        flex-direction: column;
+
+        .info {
+          margin-top: 1vw;
+          margin-bottom: 1vw;
+          display: flex;
+          width: 60%;
+          padding-left: 2%;
+          padding-right: 2%;
+          padding-top: 1vw;
+          padding-bottom: 1vw;
+          gap: 1vw;
+          border: 1px solid var(--Solitaire-color);
+
+          .content-info {
+            width: 33%;
+
+            .info-label {
+              color: var(--Solitaire-color);
+              font-size: 1vw;
+            }
+            .info-content {
+              width: 100%;
+              color: var(--Solitaire-color);
+              font-size: 1.2vw;
+              font-weight: 600;
+              white-space: initial;
+              word-wrap: break-word;
+            }
+          }
+        }
+
+        .content {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+
+          .content-label {
+            color: var(--Solitaire-color);
+            font-size: "1vw";
+            font-weight: 600;
+          }
+
+          .content-content {
+            color: var(--Solitaire-color);
+            font-size: 1vw;
+            width: 100%;
+          }
+
+          .delete-icon {
+            width: 30px;
+            height: 30px;
+            align-self: flex-end;
+            margin-top: 1vw;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}
+
+.report-card {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2vw;
+}
+
+.read-more-state {
+  display: none;
+}
+
+.read-more-target {
+  opacity: 0;
+  max-height: 0px;
+  width: 100%;
+  overflow-y: hidden;
+  font-size: 0;
+  transition: 0.4s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.read-more-state:checked ~ .read-more-wrap .read-more-target {
+  opacity: 1;
+  font-size: inherit;
+  max-height: 999em;
+}
+
+.read-more-state ~ .read-more-trigger:before {
+  content: "Hiển thị danh sách";
+}
+
+.read-more-state:checked ~ .read-more-trigger:before {
+  content: "Ẩn danh sách";
+}
+
+.read-more-trigger {
+  cursor: pointer;
+  display: inline-block;
+  padding: 0 0.5em;
+  line-height: 2;
+  border: 1px solid #ddd;
+  border-radius: 0.25em;
+  text-align: center;
+}

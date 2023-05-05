@@ -5,10 +5,13 @@ import { useRootSelector } from "../../domain";
 import { AuthenticationSelectors, checkToken } from "../../state";
 import { PageRoute } from "../constants/page.constant";
 import { AuthenticationService } from "../services/authentication.service";
-
-import { LoginPage } from "./LoginPage";
+import { CategoryPage } from "./CategoryPage";
+import { FarmerDetailPage } from "./FarmerDetailPage";
 import { HomePage } from "./HomePage";
+import { LoginPage } from "./LoginPage";
+import { MerchantDetailPage } from "./MerchantDetailPage";
 import { MerchantPage } from "./MerchantPage";
+import { ReportsPage } from "./ReportsPage";
 
 export const navigationRef = React.createRef<HTMLDivElement>();
 
@@ -20,54 +23,23 @@ export const Browser = () => {
   navigation = nav;
 
   useEffect(() => {
-    dispatch(checkToken());
+    dispatch(checkToken(0));
   }, []);
 
   return (
     <div ref={navigationRef}>
       <Routes>
         <Route path={PageRoute.LoginPage} Component={LoginPage} />
-        <Route path={PageRoute.AboutPage} Component={AboutPage} />
         <Route path={PageRoute.HomePage} Component={HomePage} />
         <Route path={PageRoute.MerchantPage} Component={MerchantPage} />
+        <Route
+          path={PageRoute.MerchantDetailPage}
+          Component={MerchantDetailPage}
+        />
+        <Route path={PageRoute.FarmerDetailPage} Component={FarmerDetailPage} />
+        <Route path={PageRoute.ReportsPage} Component={ReportsPage} />
+        <Route path={PageRoute.CategoryPage} Component={CategoryPage} />
       </Routes>
-    </div>
-  );
-};
-
-export const AboutPage = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  const authenService = new AuthenticationService();
-  const token = useRootSelector(AuthenticationSelectors.tokenSelector);
-
-  return (
-    <div>
-      <div className="App">
-        <header className="App-header">
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload {token} .
-          </p>
-          <a>
-            {" "}
-            Learn React {username} {password}
-          </a>
-          <br />
-          <input onChange={(e) => setUsername(e.target.value)} />
-          <br />
-          <input onChange={(e) => setPassword(e.target.value)} />
-
-          <button
-            type="button"
-            onClick={() => {
-              authenService.LogIn(username, password);
-            }}
-          >
-            Login
-          </button>
-        </header>
-      </div>
     </div>
   );
 };
