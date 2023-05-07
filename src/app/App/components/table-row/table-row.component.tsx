@@ -1,35 +1,43 @@
 import "./table-row.style.scss";
 
-interface TableRowProps {
-    id?: string;
-    imageurl?: string;
-    name?: string;
-    phone?: string;
-    email?: string;
-    isHeading?: boolean;
+interface Body {
+    bodyRow?: BodyRow[];
 }
 
-export const TableRow = (props?: TableRowProps) => {
+interface BodyRow {
+    content?: string;
+    imageUrl?: string;
+}
+
+interface HeaderRow {
+    title?: string;
+}
+
+interface TableRowProps {
+    header?: HeaderRow[];
+    body?: Body[];
+}
+
+export const TableRow = (props: TableRowProps) => {
     return (
         <table>
-            {props?.isHeading ? <thead>
-                <tr>
-                    <th>{props.id}</th>
-                    <th>{props.imageurl}</th>
-                    <th>{props.name}</th>
-                    <th>{props.phone}</th>
-                    <th>{props.email}</th>
-                </tr>
-            </thead> :
-                <tbody>
+            <thead>
+                {props?.header?.map(header => (
+                    <td>
+                        {header?.title}
+                    </td>
+                ))}
+            </thead>
+            <tbody>
+                {props?.body?.map(bodyrow =>
                     <tr>
-                        <th>{props?.id}</th>
-                        <th>{props?.imageurl}</th>
-                        <th>{props?.name}</th>
-                        <th>{props?.phone}</th>
-                        <th>{props?.email}</th>
-                    </tr>
-                </tbody>}
+                        {bodyrow?.bodyRow?.map(bodyCell => (
+                            <td>
+                                {bodyCell?.content ? bodyCell?.content : <img src={bodyCell.imageUrl} />}
+                            </td>
+                        ))}
+                    </tr>)}
+            </tbody>
         </table>
     );
 };

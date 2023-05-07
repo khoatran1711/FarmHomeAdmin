@@ -1,7 +1,9 @@
 @import "../../constants/colors.style.scss";
 
-.merchant-page {
-    font-family: "Intrepid";
+.news-page {
+    width: 100vw;
+    height: 100vh;
+    background: var(--TimberGreen-color);
 
     .page-container {
         background: var(--TimberGreen-color);
@@ -19,22 +21,19 @@
                 font-family: "Intrepid";
             }
         }
-    }
 
-    .search-bar {
-        .text-input {
-            width: 80%;
+        .news-row {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            margin: 5px;
         }
 
-        button {
-            background: var(--Solitaire-color);
-            margin-left: 5px;
-            color: var(--TimberGreen-color);
-
-            &:hover {
-                background: var(--Finlandia-color);
-                color: var(--Solitaire-color);
-            }
+        .news-column {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: column;
+            margin: 5px;
         }
     }
 }
