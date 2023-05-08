@@ -7,4 +7,5 @@ export const PageRoute = {
   FarmerDetailPage: "/farmer-detail",
   ReportsPage: "/reports",
   CategoryPage: "/category",
+  NewsPage: "/news",
 };

@@ -30,7 +30,7 @@ export const MenuBar = (props?: MenuBarProps) => {
           </Link>
         </li>
         <li>
-          <Link className="link" to={PageRoute.HomePage}>
+          <Link className="link" to={PageRoute.NewsPage}>
             {MenuBarTitle.news}
           </Link>
         </li>
