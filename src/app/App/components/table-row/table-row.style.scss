@@ -1,32 +1,39 @@
 @import "../../../constants/colors.style.scss";
 
 table {
-    font-family: 'Intrepid';
-    text-align: center;
-    border-collapse: collapse;
-    border-bottom: solid;
+  width: 100%;
+  margin-top: 40px;
+  font-size: 1.3vw;
+  font-family: "Intrepid";
+  text-align: center;
+  border-collapse: collapse;
+  border-bottom: solid;
+  border-color: var(--Solitaire-color);
+
+  tr:hover {
+    background: var(--SpanishGreen-color);
+  }
+
+  thead {
+    background: var(--Solitaire-color);
+    color: var(--TimberGreen-color);
+    font-weight: bold;
+  }
+
+  tbody {
+    color: var(--Solitaire-color);
+
+    img {
+      height: 50px;
+      width: 50px;
+    }
+  }
+
+  td {
+    padding: 10px;
+    border-left: solid;
+    border-right: solid;
+    border-width: 2px;
     border-color: var(--Solitaire-color);
-
-    thead {
-        background: var(--Solitaire-color);
-        color: var(--TimberGreen-color);
-        font-weight: bold;
-    }
-
-    tbody {
-        color: var(--Solitaire-color);
-
-        img {
-            height: 30px;
-            width: 30px;
-        }
-    }
-
-    td {
-        padding: 10px;
-        border-left: solid;
-        border-right: solid;
-        border-width: 1px;
-        border-color: var(--Solitaire-color);
-    }
+  }
 }

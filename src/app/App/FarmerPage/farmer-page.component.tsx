@@ -1,4 +1,4 @@
-import "./merchant-page.style.scss";
+import "./farmer-page.style.scss";
 import { TableRow } from "../components/table-row";
 import { TextInput } from "../components";
 import { MenuBar } from "../components/menu-bar";
@@ -7,7 +7,7 @@ import { TableRowTitle } from "../../constants/table-row.constant";
 import { PageRoute } from "../../constants";
 import { useEffect, useState } from "react";
 import { I18n } from "../../translation";
-import { MerchantService } from "../../services/merchant.service";
+import { FarmerService } from "../../services/farmer.service";
 import { User } from "../../models/merchant.model";
 import { globalNavigate } from "../../utilities/navigation.utilities";
 
@@ -29,14 +29,14 @@ const header = [
   },
 ];
 
-export const MerchantPage = () => {
-  const merchantService = new MerchantService();
+export const FarmerPage = () => {
+  const farmerService = new FarmerService();
 
   const [username, setUsername] = useState<string>("");
   const [body, setBody] = useState<[]>([]);
 
   const onRowClick = (rowIndex: number) => {
-    globalNavigate(PageRoute.MerchantDetailPage, body[rowIndex]);
+    globalNavigate(PageRoute.FarmerDetailPage, body[rowIndex]);
   };
 
   const convertData = async (contents: User[] | []) => {
@@ -63,7 +63,7 @@ export const MerchantPage = () => {
           content: item?.email,
         },
       ];
-      body.push({ bodyRow: bodyrow }); //Delete 2 below lines when have more merchant
+      body.push({ bodyRow: bodyrow }); //Delete 2 below lines when have more farmer
       body.push({ bodyRow: bodyrow });
       body.push({ bodyRow: bodyrow });
     });
@@ -71,7 +71,7 @@ export const MerchantPage = () => {
   };
 
   const search = async () => {
-    const response = await merchantService.searchMerchant(username);
+    const response = await farmerService.searchFarmer(username);
     const responseData = response?.data;
 
     convertData(responseData?.contents);
@@ -84,7 +84,7 @@ export const MerchantPage = () => {
   };
 
   const getData = async () => {
-    const response = await merchantService.getAllMerchant();
+    const response = await farmerService.getAllFarmer();
     const responseData = response?.data;
     convertData(responseData?.contents);
   };
@@ -94,7 +94,7 @@ export const MerchantPage = () => {
   }, []);
 
   return (
-    <div className="merchant-page">
+    <div className="farmer-page">
       <div className="page-container">
         <section className="left-content">
           <div className="label">{I18n.FARMHOME}</div>
@@ -102,7 +102,7 @@ export const MerchantPage = () => {
         </section>
         <div className="search-bar">
           <TextInput
-            label={I18n.merchants}
+            label={I18n.farmers}
             onChangeText={(e) => setUsername(e?.target?.value)}
             onKeyDown={(e) => handleEnter(e)}
           />

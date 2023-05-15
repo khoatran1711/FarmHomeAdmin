@@ -50,12 +50,15 @@
     .info {
       padding-left: 2vw;
       border-left: 1px solid var(--Solitaire-color);
+
       .label {
         color: var(--Solitaire-color);
         font-family: "Intrepid";
+
         &.big {
           font-size: 1.5vw;
         }
+
         &.small {
           font-size: 1.2vw;
         }
@@ -78,6 +81,7 @@
 
       &.parent {
         font-size: 1.3vw;
+        cursor: pointer;
       }
 
       &.child {

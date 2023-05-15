@@ -25,7 +25,7 @@ export const MenuBar = (props?: MenuBarProps) => {
           </Link>
         </li>
         <li>
-          <Link className="link" to={PageRoute.FarmerDetailPage}>
+          <Link className="link" to={PageRoute.FarmerPage}>
             {MenuBarTitle.farmers}
           </Link>
         </li>

@@ -13,6 +13,7 @@ import { MerchantDetailPage } from "./MerchantDetailPage";
 import { MerchantPage } from "./MerchantPage";
 import { ReportsPage } from "./ReportsPage";
 import { NewsPage } from "./NewsPage";
+import { FarmerPage } from "./FarmerPage";
 
 export const navigationRef = React.createRef<HTMLDivElement>();
 
@@ -33,10 +34,8 @@ export const Browser = () => {
         <Route path={PageRoute.LoginPage} Component={LoginPage} />
         <Route path={PageRoute.HomePage} Component={HomePage} />
         <Route path={PageRoute.MerchantPage} Component={MerchantPage} />
-        <Route
-          path={PageRoute.MerchantDetailPage}
-          Component={MerchantDetailPage}
-        />
+        <Route path={PageRoute.MerchantDetailPage} Component={MerchantDetailPage} />
+        <Route path={PageRoute.FarmerPage} Component={FarmerPage} />
         <Route path={PageRoute.FarmerDetailPage} Component={FarmerDetailPage} />
         <Route path={PageRoute.ReportsPage} Component={ReportsPage} />
         <Route path={PageRoute.CategoryPage} Component={CategoryPage} />

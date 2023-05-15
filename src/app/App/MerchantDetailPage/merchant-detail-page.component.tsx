@@ -1,68 +1,122 @@
 import { Colors } from "../../constants";
 import loginBackground from "../../assets/backgrounds/login-background.png";
 import blockButton from "../../assets/icons/block-user.png";
+import unblockButton from "../../assets/icons/un-block-user.png";
 import "./merchant-detail-page.style.scss";
 import { TransactionDetail } from "../components/transaction-detail/transaction-detail.component";
 import { I18n } from "../../translation";
+import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { MerchantDetailService } from "../../services/merchant-detail.service";
+import { GetMerchantDetailResponse } from "../../models/merchant-detail.model";
 
 export const MerchantDetailPage = () => {
+  const location = useLocation();
+  const merchantDetailService = new MerchantDetailService();
+
+  const stateData = location?.state?.data;
+
+  const [data, setData] = useState<GetMerchantDetailResponse | null>(null);
+  const [showTransactions, setShowTransactions] = useState<boolean>(true);
+
+  const toggleTrueFalse = (
+    value: boolean,
+    callback: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
+    if (value === true) {
+      callback(false);
+      return;
+    }
+    callback(true);
+  };
+
+  const onClickLabelParent = () => {
+    toggleTrueFalse(showTransactions, setShowTransactions);
+  };
+
+  const getData = async () => {
+    const request = await merchantDetailService.getMerchantDetail(
+      parseInt(stateData?.bodyRow[0]?.content)
+    );
+    const responseData = request?.data;
+    setData(responseData);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <>
       <div className="merchant-detail">
-        <div className="right-button">
-          <img
-            alt=""
-            src={blockButton}
-            style={{ width: "100%", height: "100%" }}
-          />
-        </div>
-        <div className="merchant-info">
-          <div className="image">
-            <div className="image-border"></div>
-            <div className="image-container">
+        {data !== null && (
+          <>
+            <div className="right-button">
               <img
                 alt=""
-                src={
-                  "https://thuthuatnhanh.com/wp-content/uploads/2022/06/hinh-anh-ma-cute.jpg"
-                }
+                src={data?.user?.status?.id == 1 ? blockButton : unblockButton}
+                style={{ width: "100%", height: "100%" }}
               />
             </div>
-          </div>
+            <div className="merchant-info">
+              <div className="image">
+                <div className="image-border"></div>
+                <div className="image-container">
+                  <img alt="" src={data?.user?.avatar} />
+                </div>
+              </div>
 
-          <div className="info">
-            <div className="label big">#28 - TRAN DANG KHOA</div>
+              <div className="info">
+                <div className="label big">
+                  #{data?.user?.id} -{" "}
+                  {data?.user?.lastName + " " + data?.user?.firstName}
+                </div>
 
-            <div className="label small">{I18n.inActive}</div>
-            <div className="label small">17-11-2001</div>
-            <div className="label small">0908851760</div>
-            <div className="label small">
-              666 Lac Long Quan Phuong 9 quan Tan Binh
+                <div className="label small">{data?.user?.status?.name}</div>
+                <div className="label small">{data?.user?.birthDay}</div>
+                <div className="label small">{data?.user?.phone}</div>
+                <div className="label small">
+                  {data?.user?.location?.address +
+                    ", " +
+                    data?.user?.location?.ward?.name +
+                    ", " +
+                    data?.user?.location?.ward?.district?.name +
+                    ", " +
+                    data?.user?.location?.ward?.district?.province?.name}{" "}
+                </div>
+                <div className="label small">{data?.user?.email}</div>
+              </div>
             </div>
-            <div className="label small">19110145@gmail.com</div>
-          </div>
-        </div>
 
-        <div className="content">
-          <div className="label parent">{I18n.transactions}</div>
+            <div className="content">
+              <div
+                className="label parent"
+                onClick={() => onClickLabelParent()}
+              >
+                {I18n.transactions}
+              </div>
+              {showTransactions ? (
+                <>
+                  <div className="label child">{I18n.completed}</div>
+                  <div className="transaction-content">
+                    {data?.historyList?.map((history) => (
+                      <TransactionDetail isCompleted={true} value={history} />
+                    ))}
+                  </div>
 
-          <div className="label child">{I18n.completed}</div>
-          <div className="transaction-content">
-            <TransactionDetail isCompleted={true} />
-            <TransactionDetail isCompleted={true} />
-            <TransactionDetail isCompleted={true} />
-            <TransactionDetail isCompleted={true} />
-            <TransactionDetail isCompleted={true} />
-          </div>
-
-          <div className="label child">{I18n.inWaiting}</div>
-          <div className="transaction-content">
-            <TransactionDetail />
-            <TransactionDetail />
-            <TransactionDetail />
-            <TransactionDetail />
-            <TransactionDetail />
-          </div>
-        </div>
+                  <div className="label child">{I18n.inWaiting}</div>
+                  <div className="transaction-content">
+                    {data?.orderList?.map((order) => (
+                      <TransactionDetail value={order} />
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <></>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </>
   );

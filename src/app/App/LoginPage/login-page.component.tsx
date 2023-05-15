@@ -10,6 +10,7 @@ import "./login-page.style.scss";
 import { HttpStatusCode } from "../../../services";
 import { globalNavigate } from "../../utilities/navigation.utilities";
 import { I18n } from "../../translation";
+import { useEffect } from "react";
 
 export const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -20,12 +21,19 @@ export const LoginPage = () => {
   const authenticationService = new AuthenticationService();
 
   const login = () => {
+    console.log(username);
     authenticationService.LogIn(username, password).then((httpResult) => {
       if (httpResult?.status === HttpStatusCode.Created) {
         globalNavigate(PageRoute.HomePage);
       }
     });
   };
+
+  const handleEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      login();
+    };
+  }
 
   return (
     <div className="login-page">
@@ -46,6 +54,7 @@ export const LoginPage = () => {
               label={I18n.password}
               onChangeText={(e) => setPassword(e?.target?.value)}
               isHidden={true}
+              onKeyDown={(e) => handleEnter(e)}
             />
           </section>
 
@@ -62,4 +71,18 @@ export const LoginPage = () => {
       </div>
     </div>
   );
+};
+
+export const OnKeyPress = (callback: Function, targetKey: String) => {
+  useEffect(() => {
+    const keyPressHandler = (event: KeyboardEvent) => {
+      if (event.key === targetKey) {
+        callback();
+      }
+    };
+    window.addEventListener("keydown", keyPressHandler);
+    return () => {
+      window.removeEventListener("keydown", keyPressHandler);
+    };
+  }, []);
 };
