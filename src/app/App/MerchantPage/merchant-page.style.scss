@@ -1,40 +1,40 @@
 @import "../../constants/colors.style.scss";
 
 .merchant-page {
-    font-family: "Intrepid";
+  font-family: "Intrepid";
 
-    .page-container {
-        background: var(--TimberGreen-color);
-        width: 100vw;
-        height: 100vh;
-        overflow: hidden;
-        display: flex;
+  .page-container {
+    background: var(--TimberGreen-color);
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
 
-        .left-content {
-            margin: 15px;
+    .left-content {
+      margin: 15px;
 
-            .label {
-                font-size: 2vw;
-                color: var(--Solitaire-color);
-                font-family: "Intrepid";
-            }
-        }
+      .label {
+        font-size: 2vw;
+        color: var(--Solitaire-color);
+        font-family: "Intrepid";
+      }
+    }
+  }
+
+  .search-bar {
+    .text-input {
+      width: 80%;
     }
 
-    .search-bar {
-        .text-input {
-            width: 80%;
-        }
+    button {
+      background: var(--Solitaire-color);
+      margin-left: 5px;
+      color: var(--TimberGreen-color);
 
-        button {
-            background: var(--Solitaire-color);
-            margin-left: 5px;
-            color: var(--TimberGreen-color);
-
-            &:hover {
-                background: var(--Finlandia-color);
-                color: var(--Solitaire-color);
-            }
-        }
+      &:hover {
+        background: var(--Finlandia-color);
+        color: var(--Solitaire-color);
+      }
     }
+  }
 }

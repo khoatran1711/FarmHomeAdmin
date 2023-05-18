@@ -7,13 +7,16 @@ import totalIncomeIcon from "../../assets/icons/total-income-icon.png";
 import Popup from "reactjs-popup";
 import { padding } from "@mui/system";
 import { DateRange, DayPicker } from "react-day-picker";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import "react-day-picker/dist/style.css";
 import { LoadingButton } from "@mui/lab";
 import { MenuBar } from "../components/menu-bar";
 import { useRootSelector } from "../../../domain";
 import { AuthenticationSelectors } from "../../../state";
+import { StatisticData } from "../../models/statistic.model";
+import { StatisticService } from "../../services/statistic.service";
+import { DateStringAPIToString } from "../../utilities/format.utilities";
 
 const pieDate = [
   {
@@ -105,15 +108,30 @@ export const HomePage = () => {
           <div className="title medium">Today: {Date()?.toLocaleString()}</div>
 
           <section className="charts">
-            <PieChart />
-            <LineChart />
-            <LineChart />
+            <PieChart
+              startDate={new Date("2023-04-19")}
+              endDate={new Date("2023-04-19")}
+            />
+            <LineChart
+              startDate={new Date("2023-04-19")}
+              endDate={new Date("2023-04-21")}
+            />
+            <LineChart
+              startDate={new Date("2023-04-19")}
+              endDate={new Date("2023-04-21")}
+            />
           </section>
 
           <section className="charts">
-            <PieChart />
-            <LineChart />
-            <LineChart />
+            <PieChart startDate={new Date("2023-04-19")} endDate={new Date()} />
+            <LineChart
+              startDate={new Date("2023-04-19")}
+              endDate={new Date("2023-05-09")}
+            />
+            <LineChart
+              startDate={new Date("2023-04-19")}
+              endDate={new Date("2023-05-09")}
+            />
           </section>
         </div>
       </div>
@@ -133,6 +151,10 @@ export const LegendLabel = () => {
 
 interface TotalLabelProps {
   viewDetail?: boolean;
+  total?: number;
+  startDate?: Date;
+  endDate?: Date;
+  isPie?: boolean;
 }
 
 const TotalLabel = (props?: TotalLabelProps) => {
@@ -157,13 +179,14 @@ const TotalLabel = (props?: TotalLabelProps) => {
       }
     >
       <img
+        alt=""
         src={totalIncomeIcon}
         style={{ width: 20, height: 20, marginRight: 10 }}
       />
       <div
         style={{ color: Colors.Solitaire, fontSize: "1.3vw", display: "flex" }}
       >
-        Total: 450 000 vnd
+        Total: {props?.total} vnd
         {props?.viewDetail && (
           <Popup
             modal
@@ -208,7 +231,17 @@ const TotalLabel = (props?: TotalLabelProps) => {
                 left: 0,
               }}
             >
-              <LineChartPopUp />
+              {props?.isPie ? (
+                <PieChartPopUp
+                  startDate={props?.startDate}
+                  endDate={props?.endDate}
+                />
+              ) : (
+                <LineChartPopUp
+                  startDate={props?.startDate}
+                  endDate={props?.endDate}
+                />
+              )}
             </div>
           </Popup>
         )}
@@ -217,159 +250,245 @@ const TotalLabel = (props?: TotalLabelProps) => {
   );
 };
 
-const PieChart = () => {
+const PieChart = ({
+  startDate,
+  endDate,
+}: {
+  startDate: Date;
+  endDate: Date;
+}) => {
+  const [data, setData] = useState<StatisticData[] | null>(null);
+  const [total, setTotal] = useState<number>(0);
+
+  const statisticService = new StatisticService();
+  const getData = async (startDate: Date, endDate: Date) => {
+    const response = await statisticService.getPieChart(startDate, endDate);
+    const data = response?.data;
+    setData(data?.data);
+    setTotal(data?.summary);
+  };
+
+  useEffect(() => {
+    getData(startDate, endDate);
+  }, [startDate, endDate]);
+
   return (
     <div className="pie-chart">
-      <TotalLabel viewDetail={true} />
-      <div className="pie-chart container">
-        <div className="pie-chart chart">
-          <ResponsivePie
-            data={pieDate}
-            margin={{ right: 10, left: 10 }}
-            startAngle={-180}
-            innerRadius={0.3}
-            padAngle={0.7}
-            cornerRadius={3}
-            activeOuterRadiusOffset={8}
-            borderWidth={1}
-            borderColor={{
-              from: "color",
-              modifiers: [["darker", 0.2]],
-            }}
-            arcLinkLabelsSkipAngle={10}
-            arcLinkLabelsTextColor="none"
-            arcLinkLabelsThickness={0}
-            arcLinkLabelsColor={{ from: "none" }}
-            arcLabelsSkipAngle={10}
-            arcLabelsTextColor={{
-              from: "color",
-              modifiers: [["darker", 40]],
-            }}
-          />
-        </div>
+      <TotalLabel
+        viewDetail={true}
+        total={total}
+        startDate={startDate}
+        endDate={endDate}
+        isPie={true}
+      />
+      {data && (
+        <div className="pie-chart container">
+          <div className="pie-chart chart">
+            <ResponsivePie
+              data={data?.map((e) => {
+                return {
+                  id: e?.name,
+                  value: e?.total,
+                };
+              })}
+              margin={{ right: 10, left: 10 }}
+              startAngle={-180}
+              innerRadius={0.3}
+              padAngle={0.7}
+              cornerRadius={3}
+              activeOuterRadiusOffset={8}
+              borderWidth={1}
+              borderColor={{
+                from: "color",
+                modifiers: [["darker", 0.2]],
+              }}
+              arcLinkLabelsSkipAngle={10}
+              arcLinkLabelsTextColor="none"
+              arcLinkLabelsThickness={0}
+              arcLinkLabelsColor={{ from: "none" }}
+              arcLabelsSkipAngle={10}
+              arcLabelsTextColor={{
+                from: "color",
+                modifiers: [["darker", 40]],
+              }}
+            />
+          </div>
 
-        <div>
-          <LegendLabel />
-          <LegendLabel />
-          <LegendLabel />
-          <LegendLabel />
-          <LegendLabel />
-          <LegendLabel />
-          <LegendLabel />
-          <LegendLabel />
+          <div>
+            <LegendLabel />
+            <LegendLabel />
+            <LegendLabel />
+            <LegendLabel />
+            <LegendLabel />
+            <LegendLabel />
+            <LegendLabel />
+            <LegendLabel />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
 
-const LineChart = () => {
+const LineChart = ({
+  startDate,
+  endDate,
+}: {
+  startDate: Date;
+  endDate: Date;
+}) => {
+  const [data, setData] = useState<StatisticData[] | null>(null);
+  const [total, setTotal] = useState<number>(0);
+
+  const statisticService = new StatisticService();
+  const getData = async (startDate: Date, endDate: Date) => {
+    const response = await statisticService.getLineChart(startDate, endDate);
+    const data = response?.data;
+    setData(data?.data);
+    setTotal(data?.summary);
+  };
+
+  useEffect(() => {
+    getData(startDate, endDate);
+  }, [startDate, endDate]);
+
   return (
     <div className="line-chart">
-      <TotalLabel viewDetail={true} />
-      <ResponsiveLine
-        data={line_data}
-        margin={{ top: 10, right: 40, bottom: 40, left: 40 }}
-        yScale={{
-          type: "linear",
-          min: "auto",
-          max: "auto",
-          stacked: true,
-          reverse: false,
-        }}
-        yFormat=" >-.2f"
-        axisTop={null}
-        enableGridX={false}
-        enableGridY={false}
-        axisRight={null}
-        colors={{ scheme: "yellow_green" }}
-        axisLeft={{
-          tickSize: 10,
-          tickPadding: 5,
-          tickRotation: 0,
-          tickValues: 4,
-          renderTick(props) {
-            return (
-              <g transform={`translate(0,${props?.y})`} style={{ opacity: 1 }}>
-                <text
-                  dominant-baseline="central"
-                  text-anchor="end"
-                  transform="translate(-15,0) rotate(0)"
-                  style={{
-                    fontFamily: "Intrepid",
-                    fontSize: "11px",
-                    fill: Colors.Solitaire,
-                  }}
-                >
-                  {props?.value}
-                </text>
-              </g>
-            );
-          },
-        }}
-        pointSize={0}
-        pointColor={{ theme: "background" }}
-        pointBorderWidth={2}
-        pointLabelYOffset={-12}
-        enableArea={true}
-        areaOpacity={0.8}
-        useMesh={true}
-        axisBottom={{
-          tickSize: 10,
-          tickPadding: 5,
-          tickRotation: 0,
-
-          tickValues: 4,
-          renderTick(props) {
-            return (
-              <g transform={`translate(${props?.x},0)`} style={{ opacity: 1 }}>
-                <text
-                  dominant-baseline="text-before-edge"
-                  text-anchor="middle"
-                  transform="translate(0,15) rotate(0)"
-                  style={{
-                    fontFamily: "Intrepid",
-                    fontSize: "11px",
-                    fill: Colors.Solitaire,
-                  }}
-                >
-                  {props?.value}
-                </text>
-              </g>
-            );
-          },
-        }}
+      <TotalLabel
+        viewDetail={true}
+        total={total}
+        startDate={startDate}
+        endDate={endDate}
       />
+      {data && (
+        <ResponsiveLine
+          data={[
+            {
+              id: "piechart",
+              data: data?.map((e) => {
+                return {
+                  x: DateStringAPIToString(e?.date),
+                  y: e?.total,
+                };
+              }),
+            },
+          ]}
+          margin={{ top: 10, right: 40, bottom: 40, left: 40 }}
+          yScale={{
+            type: "linear",
+            min: "auto",
+            max: "auto",
+            stacked: true,
+            reverse: false,
+          }}
+          yFormat=" >-.2f"
+          axisTop={null}
+          enableGridX={false}
+          enableGridY={false}
+          axisRight={null}
+          colors={{ scheme: "yellow_green" }}
+          axisLeft={{
+            tickSize: 10,
+            tickPadding: 0,
+            tickRotation: 0,
+            tickValues: 4,
+            renderTick(props) {
+              return (
+                <g
+                  transform={`translate(0,${props?.y})`}
+                  style={{ opacity: 1 }}
+                >
+                  <text
+                    dominant-baseline="central"
+                    text-anchor="end"
+                    transform="translate(-15,0) rotate(0)"
+                    style={{
+                      fontFamily: "Intrepid",
+                      fontSize: "11px",
+                      fill: Colors.Solitaire,
+                    }}
+                  >
+                    {props?.value}
+                  </text>
+                </g>
+              );
+            },
+          }}
+          pointSize={0}
+          pointColor={{ theme: "background" }}
+          pointBorderWidth={2}
+          pointLabelYOffset={-12}
+          enableArea={false}
+          areaOpacity={0.8}
+          useMesh={true}
+          axisBottom={{
+            tickSize: 10,
+            tickPadding: 5,
+            tickRotation: 0,
+            tickValues: 4,
+            renderTick(props) {
+              return (
+                <g
+                  transform={`translate(${props?.x},0)`}
+                  style={{ opacity: 1, zIndex: 10 }}
+                >
+                  <text
+                    dominant-baseline="text-before-edge"
+                    text-anchor="middle"
+                    transform="translate(0,10) rotate(0)"
+                    style={{
+                      fontFamily: "Intrepid",
+                      fontSize: "11px",
+                      fill: Colors.Solitaire,
+                    }}
+                  >
+                    {props?.value}
+                  </text>
+                </g>
+              );
+            },
+          }}
+        />
+      )}
     </div>
   );
 };
 
-export const PieChartPopUp = () => {
+export const PieChartPopUp = ({
+  startDate,
+  endDate,
+}: {
+  startDate?: Date;
+  endDate?: Date;
+}) => {
   const [isShowDatePicker, setIsShowDatePicker] = useState(false);
-  const [range, setRange] = useState<DateRange | undefined>();
+  const [range, setRange] = useState<DateRange | undefined>({
+    from: startDate,
+    to: endDate,
+  });
 
-  const data = [
-    { name: "Anom", age: 19, gender: "Male" },
-    { name: "Megha", age: 19, gender: "Female" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e1" },
-  ];
+  // const data = [
+  //   { name: "Anom", age: 19, gender: "Male" },
+  //   { name: "Megha", age: 19, gender: "Female" },
+  //   { name: "Subham", age: 25, gender: "Male" },
+  //   { name: "Subham", age: 25, gender: "Male" },
+  //   { name: "Subham", age: 25, gender: "Male" },
+  //   { name: "Subham", age: 25, gender: "Male" },
+  //   { name: "Subham", age: 25, gender: "Male" },
+  //   { name: "Subham", age: 25, gender: "Male" },
+  //   { name: "Subham", age: 25, gender: "Male" },
+  //   { name: "Subham", age: 25, gender: "Male" },
+  //   { name: "Subham", age: 25, gender: "Mal12222e" },
+  //   { name: "Subham", age: 25, gender: "Mal12222e" },
+  //   { name: "Subham", age: 25, gender: "Mal12222e" },
+  //   { name: "Subham", age: 25, gender: "Mal12222e" },
+  //   { name: "Subham", age: 25, gender: "Mal12222e" },
+  //   { name: "Subham", age: 25, gender: "Mal12222e" },
+  //   { name: "Subham", age: 25, gender: "Male" },
+  //   { name: "Subham", age: 25, gender: "Mal12222e" },
+  //   { name: "Subham", age: 25, gender: "Mal12222e" },
+  //   { name: "Subham", age: 25, gender: "Mal12222e1" },
+  // ];
 
   let footer = (
     <LoadingButton
@@ -382,6 +501,22 @@ export const PieChartPopUp = () => {
       Apply
     </LoadingButton>
   );
+
+  const [data, setData] = useState<StatisticData[] | null>(null);
+  const [total, setTotal] = useState<number>(0);
+
+  const statisticService = new StatisticService();
+  const getData = async (startDate?: Date, endDate?: Date) => {
+    if (!startDate || !endDate) return;
+    const response = await statisticService.getPieChart(startDate, endDate);
+    const data = response?.data;
+    setData(data?.data);
+    setTotal(data?.summary);
+  };
+
+  useEffect(() => {
+    getData(range?.from, range?.to);
+  }, [range]);
 
   return (
     <>
@@ -409,8 +544,8 @@ export const PieChartPopUp = () => {
               paddingLeft: 10,
             }}
           >
-            <div>To:</div>
-            <div>{range?.to && format(range.to, "PPP")}</div>
+            <div className="label">To:</div>
+            <div className="label">{range?.to && format(range.to, "PPP")}</div>
           </div>
         </div>
 
@@ -438,79 +573,86 @@ export const PieChartPopUp = () => {
         </div>
       </div>
 
-      <div className="chart-table-container">
-        <div
-          className="chart-table-container pie-chart"
-          style={{ display: "flex" }}
-        >
-          <div className="chart-table-container pie-chart container">
-            <div className="chart-table-container pie-chart chart">
-              <ResponsivePie
-                data={pieDate}
-                margin={{ right: 10, left: 10 }}
-                startAngle={-180}
-                innerRadius={0.3}
-                padAngle={0.7}
-                cornerRadius={3}
-                activeOuterRadiusOffset={8}
-                borderWidth={1}
-                borderColor={{
-                  from: "color",
-                  modifiers: [["darker", 0.2]],
-                }}
-                arcLinkLabelsSkipAngle={10}
-                arcLinkLabelsTextColor="none"
-                arcLinkLabelsThickness={0}
-                arcLinkLabelsColor={{ from: "none" }}
-                arcLabelsSkipAngle={10}
-                arcLabelsTextColor={{
-                  from: "color",
-                  modifiers: [["darker", 40]],
-                }}
-              />
+      {data && (
+        <div className="chart-table-container">
+          <div
+            className="chart-table-container pie-chart"
+            style={{ display: "flex" }}
+          >
+            <div className="chart-table-container pie-chart container">
+              <div className="chart-table-container pie-chart chart">
+                <ResponsivePie
+                  data={data?.map((e) => {
+                    return {
+                      id: e?.name,
+                      value: e?.total,
+                    };
+                  })}
+                  margin={{ right: 10, left: 10 }}
+                  startAngle={-180}
+                  innerRadius={0.3}
+                  padAngle={0.7}
+                  cornerRadius={3}
+                  activeOuterRadiusOffset={8}
+                  borderWidth={1}
+                  borderColor={{
+                    from: "color",
+                    modifiers: [["darker", 0.2]],
+                  }}
+                  arcLinkLabelsSkipAngle={10}
+                  arcLinkLabelsTextColor="none"
+                  arcLinkLabelsThickness={0}
+                  arcLinkLabelsColor={{ from: "none" }}
+                  arcLabelsSkipAngle={10}
+                  arcLabelsTextColor={{
+                    from: "color",
+                    modifiers: [["darker", 40]],
+                  }}
+                />
+              </div>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <LegendLabel />
+              <LegendLabel />
+              <LegendLabel />
+              <LegendLabel />
+              <LegendLabel />
+              <LegendLabel />
+              <LegendLabel />
+              <LegendLabel />
             </div>
           </div>
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <LegendLabel />
-            <LegendLabel />
-            <LegendLabel />
-            <LegendLabel />
-            <LegendLabel />
-            <LegendLabel />
-            <LegendLabel />
-            <LegendLabel />
-          </div>
-        </div>
 
-        <div>
-          <div className="table-container">
-            <table>
-              <tr>
-                <th>Name</th>
-                <th>Age</th>
-                <th>Gender</th>
-              </tr>
-              {data.map((val, key) => {
-                return (
-                  <tr key={key}>
-                    <td>{val.name}</td>
-                    <td>{val.age}</td>
-                    <td>{val.gender}</td>
-                  </tr>
-                );
-              })}
-            </table>
+          <div>
+            <div className="table-container">
+              <table>
+                <tr>
+                  <th>Name</th>
+                  <th>Total</th>
+                  <th>Percentage</th>
+                </tr>
+                {data?.map((val, key) => {
+                  return (
+                    <tr key={key}>
+                      <td>{val?.name}</td>
+                      <td>{val?.total}</td>
+                      <td>{val?.percent}</td>
+                    </tr>
+                  );
+                })}
+              </table>
+            </div>
+            <TotalLabel total={total} />
           </div>
-          <TotalLabel />
         </div>
-      </div>
+      )}
 
       {isShowDatePicker && (
         <DayPicker
@@ -520,9 +662,9 @@ export const PieChartPopUp = () => {
             right: 0,
             background: Colors.Solitaire,
           }}
-          defaultMonth={new Date(2022, 8)}
+          defaultMonth={new Date()}
           mode="range"
-          max={6}
+          max={31}
           selected={range}
           onSelect={setRange}
           footer={footer}
@@ -532,32 +674,46 @@ export const PieChartPopUp = () => {
   );
 };
 
-export const LineChartPopUp = () => {
+export const LineChartPopUp = ({
+  startDate,
+  endDate,
+}: {
+  startDate?: Date;
+  endDate?: Date;
+}) => {
   const [isShowDatePicker, setIsShowDatePicker] = useState(false);
-  const [range, setRange] = useState<DateRange | undefined>();
+  const [range, setRange] = useState<DateRange | undefined>({
+    from: startDate,
+    to: endDate,
+  });
 
-  const data = [
-    { name: "Anom", age: 19, gender: "Male" },
-    { name: "Megha", age: 19, gender: "Female" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e1" },
-  ];
+  const [data, setData] = useState<StatisticData[] | null>(null);
+  const [total, setTotal] = useState<number>(0);
+
+  const statisticService = new StatisticService();
+
+  // const data = [
+  //   { name: "Anom", age: 19, gender: "Male" },
+  //   { name: "Megha", age: 19, gender: "Female" },
+  //   { name: "Subham", age: 25, gender: "Male" },
+  //   { name: "Subham", age: 25, gender: "Male" },
+  //   { name: "Subham", age: 25, gender: "Male" },
+  //   { name: "Subham", age: 25, gender: "Male" },
+  //   { name: "Subham", age: 25, gender: "Male" },
+  //   { name: "Subham", age: 25, gender: "Male" },
+  //   { name: "Subham", age: 25, gender: "Male" },
+  //   { name: "Subham", age: 25, gender: "Male" },
+  //   { name: "Subham", age: 25, gender: "Mal12222e" },
+  //   { name: "Subham", age: 25, gender: "Mal12222e" },
+  //   { name: "Subham", age: 25, gender: "Mal12222e" },
+  //   { name: "Subham", age: 25, gender: "Mal12222e" },
+  //   { name: "Subham", age: 25, gender: "Mal12222e" },
+  //   { name: "Subham", age: 25, gender: "Mal12222e" },
+  //   { name: "Subham", age: 25, gender: "Male" },
+  //   { name: "Subham", age: 25, gender: "Mal12222e" },
+  //   { name: "Subham", age: 25, gender: "Mal12222e" },
+  //   { name: "Subham", age: 25, gender: "Mal12222e1" },
+  // ];
 
   let footer = (
     <LoadingButton
@@ -570,6 +726,18 @@ export const LineChartPopUp = () => {
       Apply
     </LoadingButton>
   );
+
+  const getData = async (startDate?: Date, endDate?: Date) => {
+    if (!startDate || !endDate) return;
+    const response = await statisticService.getLineChart(startDate, endDate);
+    const data = response?.data;
+    setData(data?.data);
+    setTotal(data?.summary);
+  };
+
+  useEffect(() => {
+    getData(range?.from, range?.to);
+  }, [range]);
 
   return (
     <>
@@ -621,87 +789,98 @@ export const LineChartPopUp = () => {
       <div className="chart-table-container">
         <div className="chart-table-container line-chart">
           <div className="chart-table-container line-chart container">
-            <div className="chart-table-container line-chart chart">
-              <ResponsiveLine
-                data={line_data}
-                margin={{ top: 10, right: 40, bottom: 40, left: 40 }}
-                yScale={{
-                  type: "linear",
-                  min: "auto",
-                  max: "auto",
-                  stacked: true,
-                  reverse: false,
-                }}
-                yFormat=" >-.2f"
-                axisTop={null}
-                enableGridX={false}
-                enableGridY={false}
-                axisRight={null}
-                colors={{ scheme: "yellow_green" }}
-                axisLeft={{
-                  tickSize: 10,
-                  tickPadding: 5,
-                  tickRotation: 0,
-                  tickValues: 4,
-                  renderTick(props) {
-                    return (
-                      <g
-                        transform={`translate(0,${props?.y})`}
-                        style={{ opacity: 1 }}
-                      >
-                        <text
-                          dominant-baseline="central"
-                          text-anchor="end"
-                          transform="translate(-15,0) rotate(0)"
-                          style={{
-                            fontFamily: "Intrepid",
-                            fontSize: "11px",
-                            fill: Colors.Solitaire,
-                          }}
+            {data && (
+              <div className="chart-table-container line-chart chart">
+                <ResponsiveLine
+                  data={[
+                    {
+                      id: "piechart",
+                      data: data?.map((e) => {
+                        return {
+                          x: DateStringAPIToString(e?.date),
+                          y: e?.total,
+                        };
+                      }),
+                    },
+                  ]}
+                  margin={{ top: 10, right: 40, bottom: 40, left: 40 }}
+                  yScale={{
+                    type: "linear",
+                    min: "auto",
+                    max: "auto",
+                    stacked: true,
+                    reverse: false,
+                  }}
+                  yFormat=" >-.2f"
+                  axisTop={null}
+                  enableGridX={false}
+                  enableGridY={false}
+                  axisRight={null}
+                  colors={{ scheme: "yellow_green" }}
+                  axisLeft={{
+                    tickSize: 10,
+                    tickPadding: 5,
+                    tickRotation: 0,
+                    tickValues: 4,
+                    renderTick(props) {
+                      return (
+                        <g
+                          transform={`translate(0,${props?.y})`}
+                          style={{ opacity: 1 }}
                         >
-                          {props?.value}
-                        </text>
-                      </g>
-                    );
-                  },
-                }}
-                pointSize={0}
-                pointColor={{ theme: "background" }}
-                pointBorderWidth={2}
-                pointLabelYOffset={-12}
-                enableArea={true}
-                areaOpacity={0.8}
-                useMesh={true}
-                axisBottom={{
-                  tickSize: 10,
-                  tickPadding: 5,
-                  tickRotation: 0,
+                          <text
+                            dominant-baseline="central"
+                            text-anchor="end"
+                            transform="translate(-15,0) rotate(0)"
+                            style={{
+                              fontFamily: "Intrepid",
+                              fontSize: "11px",
+                              fill: Colors.Solitaire,
+                            }}
+                          >
+                            {props?.value}
+                          </text>
+                        </g>
+                      );
+                    },
+                  }}
+                  pointSize={0}
+                  pointColor={{ theme: "background" }}
+                  pointBorderWidth={2}
+                  pointLabelYOffset={-12}
+                  areaOpacity={0.8}
+                  useMesh={true}
+                  axisBottom={{
+                    tickSize: 10,
+                    tickPadding: 5,
+                    tickRotation: 0,
 
-                  tickValues: 4,
-                  renderTick(props) {
-                    return (
-                      <g
-                        transform={`translate(${props?.x},0)`}
-                        style={{ opacity: 1 }}
-                      >
-                        <text
-                          dominant-baseline="text-before-edge"
-                          text-anchor="middle"
-                          transform="translate(0,15) rotate(0)"
-                          style={{
-                            fontFamily: "Intrepid",
-                            fontSize: "11px",
-                            fill: Colors.Solitaire,
-                          }}
+                    tickValues: 4,
+                    renderTick(props) {
+                      return (
+                        <g
+                          transform={`translate(${props?.x},0)`}
+                          style={{ opacity: 1 }}
                         >
-                          {props?.value}
-                        </text>
-                      </g>
-                    );
-                  },
-                }}
-              />
-            </div>
+                          <text
+                            dominant-baseline="text-before-edge"
+                            text-anchor="middle"
+                            transform="translate(0,15) rotate(0)"
+                            style={{
+                              fontFamily: "Intrepid",
+                              fontSize: "11px",
+                              fill: Colors.Solitaire,
+                            }}
+                          >
+                            {props?.value}
+                          </text>
+                        </g>
+                      );
+                    },
+                  }}
+                />
+              </div>
+            )}
           </div>
         </div>
 
@@ -709,22 +888,20 @@ export const LineChartPopUp = () => {
           <div className="table-container">
             <table>
               <tr>
-                <th>Name</th>
-                <th>Age</th>
-                <th>Gender</th>
+                <th>Date</th>
+                <th>Total</th>
               </tr>
-              {data.map((val, key) => {
+              {data?.map((val, key) => {
                 return (
                   <tr key={key}>
-                    <td>{val.name}</td>
-                    <td>{val.age}</td>
-                    <td>{val.gender}</td>
+                    <td>{val?.date}</td>
+                    <td>{val?.total}</td>
                   </tr>
                 );
               })}
             </table>
           </div>
-          <TotalLabel />
+          <TotalLabel total={total} />
         </div>
       </div>
 
@@ -736,9 +913,9 @@ export const LineChartPopUp = () => {
             right: 0,
             background: Colors.Solitaire,
           }}
-          defaultMonth={new Date(2022, 8)}
+          defaultMonth={new Date()}
           mode="range"
-          max={6}
+          max={31}
           selected={range}
           onSelect={setRange}
           footer={footer}

@@ -1,32 +1,38 @@
 @import "../../../constants/colors.style.scss";
 
-table {
-    font-family: 'Intrepid';
-    text-align: center;
-    border-collapse: collapse;
-    border-bottom: solid;
+.table {
+  font-family: "Intrepid";
+  text-align: center;
+  border-collapse: collapse;
+  border-bottom: solid;
+  border-color: var(--Solitaire-color);
+
+  thead {
+    background: var(--Solitaire-color);
+    color: var(--TimberGreen-color);
+    font-weight: bold;
+  }
+
+  tbody {
+    width: 100vw;
+    color: var(--Solitaire-color);
+
+    img {
+      height: 40px;
+      width: 40px;
+      object-fit: fill;
+    }
+  }
+
+  td {
+    padding: 10px;
+    border-left: solid;
+    border-right: solid;
+    border-width: 1px;
     border-color: var(--Solitaire-color);
+  }
 
-    thead {
-        background: var(--Solitaire-color);
-        color: var(--TimberGreen-color);
-        font-weight: bold;
-    }
-
-    tbody {
-        color: var(--Solitaire-color);
-
-        img {
-            height: 30px;
-            width: 30px;
-        }
-    }
-
-    td {
-        padding: 10px;
-        border-left: solid;
-        border-right: solid;
-        border-width: 1px;
-        border-color: var(--Solitaire-color);
-    }
+  tbody :hover {
+    background: var(--Finlandia-color);
+  }
 }

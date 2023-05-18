@@ -1,43 +1,46 @@
 import "./table-row.style.scss";
 
 interface Body {
-    bodyRow?: BodyRow[];
+  bodyRow?: BodyRow[];
 }
 
 interface BodyRow {
-    content?: string;
-    imageUrl?: string;
+  content?: string;
+  imageUrl?: string;
 }
 
 interface HeaderRow {
-    title?: string;
+  title?: string;
 }
 
 interface TableRowProps {
-    header?: HeaderRow[];
-    body?: Body[];
+  header?: HeaderRow[];
+  body?: Body[];
 }
 
 export const TableRow = (props: TableRowProps) => {
-    return (
-        <table>
-            <thead>
-                {props?.header?.map(header => (
-                    <td>
-                        {header?.title}
-                    </td>
-                ))}
-            </thead>
-            <tbody>
-                {props?.body?.map(bodyrow =>
-                    <tr>
-                        {bodyrow?.bodyRow?.map(bodyCell => (
-                            <td>
-                                {bodyCell?.content ? bodyCell?.content : <img src={bodyCell.imageUrl} />}
-                            </td>
-                        ))}
-                    </tr>)}
-            </tbody>
-        </table>
-    );
+  return (
+    <table className="table" style={{ width: "100%" }}>
+      <thead>
+        {props?.header?.map((header) => (
+          <td>{header?.title}</td>
+        ))}
+      </thead>
+      <tbody>
+        {props?.body?.map((e) => (
+          <tr>
+            {e?.bodyRow?.map((bodyCell) => (
+              <td>
+                {bodyCell?.content ? (
+                  bodyCell?.content
+                ) : (
+                  <img alt="" src={bodyCell.imageUrl} />
+                )}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
 };
