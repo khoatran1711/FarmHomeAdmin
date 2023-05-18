@@ -7,7 +7,7 @@ import { TransactionDetail } from "../components/transaction-detail";
 import { ResponsiveLine } from "@nivo/line";
 import { ResponsivePie } from "@nivo/pie";
 import { CategoryColors } from "../../constants/category-colors.constants";
-import { LegendLabel } from "../HomePage";
+
 import { width } from "@mui/system";
 import { I18n } from "../../translation";
 import { useLocation } from "react-router-dom";
@@ -17,6 +17,7 @@ import {
   GetFarmerDetailResponse,
 } from "../../models/farmer-detail.model";
 import { useEffect, useState } from "react";
+import { LegendLabel } from "../components/pie-chart";
 
 const line_data = [
   {

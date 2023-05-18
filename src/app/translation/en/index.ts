@@ -70,4 +70,5 @@ export const EN = {
   Tomato: "Tomato",
   Turnip: "Turnip",
   Watermelon: "Watermelon",
+  total: "Total",
 };
