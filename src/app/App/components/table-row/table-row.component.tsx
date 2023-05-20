@@ -2,14 +2,18 @@ import "./table-row.style.scss";
 
 interface Body {
   bodyRow?: BodyRow[];
+  bodyRow?: BodyRow[];
 }
 
 interface BodyRow {
   content?: string;
   imageUrl?: string;
+  content?: string;
+  imageUrl?: string;
 }
 
 interface HeaderRow {
+  title?: string;
   title?: string;
 }
 
@@ -35,7 +39,7 @@ export const TableRow = (props: TableRowProps) => {
                 {bodyCell?.content ? (
                   bodyCell?.content
                 ) : (
-                  <img src={bodyCell.imageUrl} />
+                  <img alt="" src={bodyCell.imageUrl} />
                 )}
               </td>
             ))}
@@ -45,3 +49,4 @@ export const TableRow = (props: TableRowProps) => {
     </table>
   );
 };
+
