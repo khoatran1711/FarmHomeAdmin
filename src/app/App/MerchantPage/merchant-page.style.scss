@@ -19,36 +19,62 @@
         font-family: "Intrepid";
       }
     }
-  }
 
-  .search-bar {
-    width: 100%;
-    margin-right: 50px;
-    margin-top: 10px;
+    .right-content {
+      width: 100%;
+      margin-top: 10px;
+      margin-right: 10px;
 
-    .text-input {
-      margin-top: 32px;
-      align-items: center;
-      width: 67vw;
-      height: 3.5%;
-    }
+      .search {
+        width: 100%;
+        margin-right: 50px;
+        margin-top: 10px;
+        height: 100px;
 
-    button {
-      margin-top: 30px;
-      font-weight: bold;
-      padding: 8px 30px;
-      background: var(--Solitaire-color);
-      float: right;
-      color: var(--TimberGreen-color);
+        .search-bar {
+          width: 100%;
+          margin-top: 20px;
+          display: flex;
+          justify-content: space-between;
 
-      &:hover {
-        background: var(--Finlandia-color);
+          input {
+            width: 99%;
+            min-height: 32px;
+            border: 1px solid var(--Solitaire-color);
+            background: none;
+            outline: none;
+            color: var(--Solitaire-color);
+            font-family: "Intrepid";
+            font-size: 14pt;
+            margin-right: 20px;
+
+            &:focus {
+              border: 1px solid var(--Solitaire-color);
+              background: none;
+              outline: none;
+            }
+          }
+
+          button {
+            height: 40px;
+            font-weight: bold;
+            font-size: 14pt;
+            padding: 15px 30px;
+            background: var(--Solitaire-color);
+            color: var(--TimberGreen-color);
+
+            &:hover {
+              background: var(--Finlandia-color);
+              color: var(--Solitaire-color);
+            }
+          }
+        }
+      }
+
+      .label {
+        font-size: 1.5vw;
         color: var(--Solitaire-color);
       }
-    }
-
-    .text-label {
-      font-size: 1.5vw;
     }
   }
 }

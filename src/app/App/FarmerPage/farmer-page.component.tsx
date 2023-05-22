@@ -63,8 +63,6 @@ export const FarmerPage = () => {
           content: item?.email,
         },
       ];
-      body.push({ bodyRow: bodyrow }); //Delete 2 below lines when have more farmer
-      body.push({ bodyRow: bodyrow });
       body.push({ bodyRow: bodyrow });
     });
     setBody(body);
@@ -100,17 +98,19 @@ export const FarmerPage = () => {
           <div className="label">{I18n.FARMHOME}</div>
           <MenuBar />
         </section>
-        <div className="search-bar">
-          <TextInput
-            label={I18n.farmers}
-            onChangeText={(e) => setUsername(e?.target?.value)}
-            onKeyDown={(e) => handleEnter(e)}
-          />
-          <Button onClick={() => search()}>search</Button>
+        <section className="right-content">
+          <div className="search">
+            <div className="label">{I18n.farmers}</div>
+            <div className="search-bar">
+              <input onChange={(e) => setUsername(e?.target?.value)}
+                onKeyDown={(e) => handleEnter(e)} />
+              <Button onClick={() => search()}>search</Button>
+            </div>
+          </div>
           {body?.length > 0 && (
             <TableRow header={header} body={body} onClick={onRowClick} />
           )}
-        </div>
+        </section>
       </div>
     </div>
   );

@@ -2,18 +2,14 @@ import "./table-row.style.scss";
 
 interface Body {
   bodyRow?: BodyRow[];
-  bodyRow?: BodyRow[];
 }
 
 interface BodyRow {
   content?: string;
   imageUrl?: string;
-  content?: string;
-  imageUrl?: string;
 }
 
 interface HeaderRow {
-  title?: string;
   title?: string;
 }
 

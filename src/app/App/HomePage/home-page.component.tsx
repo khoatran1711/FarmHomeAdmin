@@ -6,8 +6,6 @@ import { MenuBar } from "../components/menu-bar";
 import { PieChart } from "../components/pie-chart";
 import { LineChart } from "../components/line-chart";
 import { ChartService } from "../../services/chart.service";
-import { PieChartData, StatisticUserResponse } from "../../models/chart.model";
-import { rgbToHex } from "@mui/material";
 
 export const HomePage = () => {
   const chartService = new ChartService();

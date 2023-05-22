@@ -21,8 +21,6 @@ export const EN = {
   mail: "Mail",
   content: "Content",
   ID: "ID",
-  avatar: "Avatar",
-  name: "Name",
   email: "Email",
   product: "Product",
   farmer: "Farmer",
