@@ -4,6 +4,7 @@ export const PageRoute = {
   AboutPage: "/about",
   MerchantPage: "/merchant",
   MerchantDetailPage: "/merchant-detail",
+  FarmerPage: "/farmer",
   FarmerDetailPage: "/farmer-detail",
   ReportsPage: "/reports",
   CategoryPage: "/category",

@@ -1,11 +1,18 @@
 @import "../../../constants/colors.style.scss";
 
-.table {
+table {
+  width: 100%;
+  margin-top: 20px;
+  font-size: 1.3vw;
   font-family: "Intrepid";
   text-align: center;
   border-collapse: collapse;
   border-bottom: solid;
   border-color: var(--Solitaire-color);
+
+  tr:hover {
+    background: var(--SpanishGreen-color);
+  }
 
   thead {
     background: var(--Solitaire-color);
@@ -14,13 +21,11 @@
   }
 
   tbody {
-    width: 100vw;
     color: var(--Solitaire-color);
 
     img {
-      height: 40px;
-      width: 40px;
-      object-fit: fill;
+      height: 50px;
+      width: 50px;
     }
   }
 
@@ -28,11 +33,7 @@
     padding: 10px;
     border-left: solid;
     border-right: solid;
-    border-width: 1px;
+    border-width: 2px;
     border-color: var(--Solitaire-color);
-  }
-
-  tbody :hover {
-    background: var(--Finlandia-color);
   }
 }

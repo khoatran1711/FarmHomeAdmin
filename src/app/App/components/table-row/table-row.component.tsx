@@ -16,20 +16,21 @@ interface HeaderRow {
 interface TableRowProps {
   header?: HeaderRow[];
   body?: Body[];
+  onClick?: (rowIndex: number) => void;
 }
 
 export const TableRow = (props: TableRowProps) => {
   return (
-    <table className="table" style={{ width: "100%" }}>
+    <table>
       <thead>
         {props?.header?.map((header) => (
           <td>{header?.title}</td>
         ))}
       </thead>
       <tbody>
-        {props?.body?.map((e) => (
-          <tr>
-            {e?.bodyRow?.map((bodyCell) => (
+        {props?.body?.map((bodyrow, index) => (
+          <tr key={index} onClick={() => props?.onClick?.(index)}>
+            {bodyrow?.bodyRow?.map((bodyCell) => (
               <td>
                 {bodyCell?.content ? (
                   bodyCell?.content
@@ -44,3 +45,4 @@ export const TableRow = (props: TableRowProps) => {
     </table>
   );
 };
+

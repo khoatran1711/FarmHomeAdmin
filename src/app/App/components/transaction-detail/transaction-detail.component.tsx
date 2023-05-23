@@ -1,9 +1,12 @@
 import { Colors } from "../../../constants";
+import { Value } from "../../../models/merchant-detail.model";
 import { I18n } from "../../../translation";
 import "./transaction-detail.style.scss";
 
 interface TransactionDetailProps {
   isCompleted?: boolean;
+  value?: Value;
+  isFarmer?: boolean;
 }
 
 export const TransactionDetail = (props?: TransactionDetailProps) => {
@@ -14,16 +17,52 @@ export const TransactionDetail = (props?: TransactionDetailProps) => {
         background: props?.isCompleted ? Colors.Finlandia : Colors.SpanishGreen,
       }}
     >
-      <TransactionProperty width={15} title={I18n.ID} value={"12"} />
-      <TransactionProperty width={20} title={I18n.product} value={"Cam sành"} />
+      <TransactionProperty
+        width={15}
+        title={I18n.ID}
+        value={props?.value?.id}
+      />
       <TransactionProperty
         width={20}
-        title={"Farmer"}
-        value={"Khoa tran store"}
+        title={I18n.product}
+        value={props?.value?.fruit?.name}
       />
-      <TransactionProperty width={15} title={I18n.weight} value={"12 KG"} />
-      <TransactionProperty width={15} title={I18n.date} value={"12-10-2023"} />
-      <TransactionProperty width={15} title={I18n.price} value={"23.000vnd"} />
+      {props?.isFarmer ? (
+        <TransactionProperty
+          width={20}
+          title={I18n.merchant}
+          value={
+            props?.value?.merchant?.lastName +
+            " " +
+            props?.value?.merchant?.firstName
+          }
+        />
+      ) : (
+        <TransactionProperty
+          width={20}
+          title={I18n.farmer}
+          value={
+            props?.value?.farmer?.lastName +
+            " " +
+            props?.value?.farmer?.firstName
+          }
+        />
+      )}
+      <TransactionProperty
+        width={15}
+        title={I18n.weight}
+        value={props?.value?.amount + " Kg"}
+      />
+      <TransactionProperty
+        width={15}
+        title={I18n.date}
+        value={props?.value?.date}
+      />
+      <TransactionProperty
+        width={15}
+        title={I18n.price}
+        value={props?.value?.price + ".000 vnd"}
+      />
     </div>
   );
 };
