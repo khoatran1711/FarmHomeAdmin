@@ -14,8 +14,7 @@ interface LineChartProps {
 
 const line_data = [
   {
-    id: "japan",
-    color: CategoryColors.Mango,
+    id: "user",
     data: [
       {
         x: "plane",

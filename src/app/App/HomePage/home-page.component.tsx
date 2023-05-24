@@ -15,23 +15,7 @@ export const HomePage = () => {
   const [merchantData, setMerchantData] = useState<[]>([]);
   const [merchantColor, setMerchantColor] = useState<[]>([]);
   const [total, setTotal] = useState<number>(0);
-
-  const getColor = (value: number) => {
-    const max = 120;
-    const valueAsMax = value / max;
-    const valueFromMaxRgbInt = Math.floor(16600000 * valueAsMax);
-
-    const blue = Math.floor(valueFromMaxRgbInt % 256);
-    const green = Math.floor((valueFromMaxRgbInt / 256) % 256);
-    const red = Math.floor((valueFromMaxRgbInt / 256 / 256) % 256);
-
-    const toHex = (c: number): string => {
-      const hex: string = c.toString(16).padStart(2, "0");
-      return hex.length === 1 ? "0" + hex : hex;
-    };
-
-    return "#" + toHex(red) + toHex(green) + toHex(blue);
-  };
+  const [statisticDateDataMonth, setStatisticDateDataMonth] = useState<[]>([]);
 
   function getRandomHexColor(value: number) {
     const seed = value % 1307; // Limit the seed to a smaller range
@@ -75,6 +59,30 @@ export const HomePage = () => {
     });
     setMerchantColor(merchantColors);
     setMerchantData(merchantPieData);
+
+    const requestLinechartMonth = await chartService.statisticDate(7);
+    const responseDataLinechartMonth = requestLinechartMonth?.data;
+    const dateData: any = [];
+    responseDataLinechartMonth?.data?.map((item) => {
+      const date = new Date(item?.date);
+      const data = {
+        date: item?.date,
+        x: date.getDate().toString() + "-" + (date.getMonth() + 1).toString(),
+        y: item?.total,
+      };
+      dateData.push(data);
+    });
+    dateData.sort(
+      (
+        a: { date: string | number | Date },
+        b: { date: string | number | Date }
+      ) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return dateA.getTime() - dateB.getTime();
+      }
+    );
+    setStatisticDateDataMonth(dateData);
   };
 
   useEffect(() => {
@@ -95,27 +103,28 @@ export const HomePage = () => {
 
           <div className="title medium">Today: {Date()?.toLocaleString()}</div>
           {farmerData != null && (
-            <>
+            <div className="charts-display">
               <section className="charts">
                 <PieChart
                   data={farmerData}
                   total={total}
                   colors={farmerColor}
                 />
-                <LineChart data={line_data} />
-                <LineChart data={line_data} />
-              </section>
-
-              <section className="charts">
                 <PieChart
                   data={merchantData}
                   total={total}
                   colors={merchantColor}
                 />
-                <LineChart data={line_data} />
-                <LineChart data={line_data} />
               </section>
-            </>
+
+              <section className="charts">
+                {statisticDateDataMonth?.length > 0 && (
+                  <LineChart
+                    data={[{ id: "test", data: statisticDateDataMonth }]}
+                  />
+                )}
+              </section>
+            </div>
           )}
         </div>
       </div>
@@ -129,35 +138,35 @@ const line_data = [
     color: CategoryColors.Mango,
     data: [
       {
-        x: "plane",
+        x: 21,
         y: 275,
       },
       {
-        x: "helicopter",
+        x: 23,
         y: 261,
       },
       {
-        x: "boat",
+        x: 1,
         y: 267,
       },
       {
-        x: "train",
+        x: 8,
         y: 105,
       },
       {
-        x: "subway",
+        x: 5,
         y: 91,
       },
       {
-        x: "bus",
+        x: 3,
         y: 16,
       },
       {
-        x: "car",
+        x: 11,
         y: 184,
       },
       {
-        x: "discord",
+        x: 15,
         y: 50,
       },
     ],

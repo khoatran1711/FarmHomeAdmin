@@ -1,4 +1,7 @@
-export const URL_STATISTIC_USER = "admin/statistic/user"
+import { StatisticData } from "./statistic.model";
+
+export const URL_STATISTIC_USER = "admin/statistic/user";
+export const URL_STATISTIC_DATE = "admin/statistic/date";
 
 export interface StatisticUserResponse {
   farmer: UserStatistic[];
@@ -15,14 +18,22 @@ interface UserStatistic {
 export interface PieChartData {
   id: string;
   value: number;
-  color: string;
 }
 
 export interface LineChartData {
   id: string;
-  color: string;
   data: {
-    x: string;
+    x: string | number;
     y: number;
   }[];
+}
+
+export interface StatisticDateResponse {
+  data: DateStatistic[];
+  summary: number;
+}
+
+interface DateStatistic {
+  date: string;
+  total: number;
 }
