@@ -10,6 +10,7 @@ import { LineChartData } from "../../../models/chart.model";
 
 interface LineChartProps {
   data: LineChartData[];
+  total: number;
 }
 
 const line_data = [
@@ -55,7 +56,7 @@ const line_data = [
 export const LineChart = (props: LineChartProps) => {
   return (
     <div className="line-chart">
-      <TotalLabel viewDetail={true} />
+      <TotalLabel viewDetail={true} total={props?.total} />
       <ResponsiveLine
         data={props.data}
         margin={{ top: 10, right: 40, bottom: 40, left: 40 }}

@@ -6,6 +6,7 @@ import { MenuBar } from "../components/menu-bar";
 import { PieChart } from "../components/pie-chart";
 import { LineChart } from "../components/line-chart";
 import { ChartService } from "../../services/chart.service";
+import { StatItem } from "../components/stats-item";
 
 export const HomePage = () => {
   const chartService = new ChartService();
@@ -16,6 +17,7 @@ export const HomePage = () => {
   const [merchantColor, setMerchantColor] = useState<[]>([]);
   const [total, setTotal] = useState<number>(0);
   const [statisticDateDataMonth, setStatisticDateDataMonth] = useState<[]>([]);
+  const [linechartTotal, setLinechartTotal] = useState<number>(0);
 
   function getRandomHexColor(value: number) {
     const seed = value % 1307; // Limit the seed to a smaller range
@@ -72,17 +74,8 @@ export const HomePage = () => {
       };
       dateData.push(data);
     });
-    dateData.sort(
-      (
-        a: { date: string | number | Date },
-        b: { date: string | number | Date }
-      ) => {
-        const dateA = new Date(a.date);
-        const dateB = new Date(b.date);
-        return dateA.getTime() - dateB.getTime();
-      }
-    );
     setStatisticDateDataMonth(dateData);
+    setLinechartTotal(responseDataLinechartMonth?.summary);
   };
 
   useEffect(() => {
@@ -121,8 +114,15 @@ export const HomePage = () => {
                 {statisticDateDataMonth?.length > 0 && (
                   <LineChart
                     data={[{ id: "test", data: statisticDateDataMonth }]}
+                    total={linechartTotal}
                   />
                 )}
+                <div className="stats-items">
+                  <StatItem />
+                  <StatItem />
+                  <StatItem />
+                  <StatItem />
+                </div>
               </section>
             </div>
           )}
