@@ -1,5 +1,6 @@
 export const URL_PIE_CHART = "admin/statistic/pie-chart";
 export const URL_LINE_CHART = "admin/statistic/bar-chart";
+export const URL_STATS = "admin/statistic/stats";
 
 export interface PieChartRequest {
   startDate: string;
@@ -21,4 +22,11 @@ export interface StatisticData {
   total?: number;
   percent?: number;
   date?: string;
+}
+
+export interface StatsData {
+  totalUser: number;
+  totalMerchant: number;
+  totalFarmer: number;
+  newThisMonth: number;
 }

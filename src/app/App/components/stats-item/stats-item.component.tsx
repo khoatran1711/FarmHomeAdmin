@@ -1,11 +1,15 @@
-import merchant from "../../../assets/icons/merchant1.png";
 import "./stats-item.style.scss";
 
-export const StatItem = () => {
+interface StatsItemProps {
+  src: string;
+  label: string;
+}
+
+export const StatItem = (props: StatsItemProps) => {
   return (
     <div className="stats-item">
-      <img src={merchant} />
-      <div className="label">hello</div>
+      <img src={props?.src} />
+      <div className="label">{props?.label}</div>
     </div>
   );
 };

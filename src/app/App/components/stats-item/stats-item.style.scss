@@ -1,20 +1,31 @@
 @import "../../../constants/colors.style.scss";
 
 .stats-item {
-  width: 25%;
+  width: 20%;
+  height: 70%;
   min-width: 100px;
   min-height: 100px;
-
   display: flex;
-  justify-content: center;
+  align-items: center;
+  margin-right: 25px;
+  margin-left: 25px;
+  margin-top: 30px;
 
   img {
-    width: 80%;
-    height: 80%;
+    width: 60%;
   }
 
   .label {
+    width: fit-content;
+    height: fit-content;
+    text-align: center;
+    display: flex;
+    align-items: center;
     font-style: "Intrepid";
+    font-size: 14pt;
     color: var(--Solitaire-color);
+    margin-left: 10px;
+    white-space: nowrap;
   }
+
 }

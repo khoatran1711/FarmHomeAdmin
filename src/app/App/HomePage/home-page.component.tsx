@@ -7,9 +7,16 @@ import { PieChart } from "../components/pie-chart";
 import { LineChart } from "../components/line-chart";
 import { ChartService } from "../../services/chart.service";
 import { StatItem } from "../components/stats-item";
+import merchant from "../../assets/icons/merchant.png";
+import farmer from "../../assets/icons/farmer.png";
+import user from "../../assets/icons/user.png";
+import newuser from "../../assets/icons/newuser.png";
+import { StatisticService } from "../../services/statistic.service";
+import { StatsData } from "../../models/statistic.model";
 
 export const HomePage = () => {
   const chartService = new ChartService();
+  const statisticService = new StatisticService();
 
   const [farmerData, setFarmerData] = useState<[]>([]);
   const [farmerColor, setFarmerColor] = useState<[]>([]);
@@ -18,6 +25,7 @@ export const HomePage = () => {
   const [total, setTotal] = useState<number>(0);
   const [statisticDateDataMonth, setStatisticDateDataMonth] = useState<[]>([]);
   const [linechartTotal, setLinechartTotal] = useState<number>(0);
+  const [stats, setStats] = useState<StatsData | null>(null);
 
   function getRandomHexColor(value: number) {
     const seed = value % 1307; // Limit the seed to a smaller range
@@ -76,6 +84,10 @@ export const HomePage = () => {
     });
     setStatisticDateDataMonth(dateData);
     setLinechartTotal(responseDataLinechartMonth?.summary);
+
+    const requestStatsData = await statisticService.getStats();
+    setStats(requestStatsData?.data);
+    console.log(stats);
   };
 
   useEffect(() => {
@@ -117,12 +129,20 @@ export const HomePage = () => {
                     total={linechartTotal}
                   />
                 )}
-                <div className="stats-items">
-                  <StatItem />
-                  <StatItem />
-                  <StatItem />
-                  <StatItem />
-                </div>
+                {stats != null && (<>
+                  <div className="stats-items">
+                    <div className="stats-row">
+                      <StatItem src={merchant} label={stats.totalMerchant.toString() + " Merchants"} />
+                      <StatItem src={farmer} label={stats.totalFarmer.toString() + " Farmers"} />
+                    </div>
+
+                    <div className="stats-row">
+                      <StatItem src={user} label={stats.totalUser.toString() + " Users"} />
+                      <StatItem src={newuser} label={stats.newThisMonth.toString() + " New users this month"} />
+                    </div>
+                  </div>
+                </>)}
+
               </section>
             </div>
           )}
