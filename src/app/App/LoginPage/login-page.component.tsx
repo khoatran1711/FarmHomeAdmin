@@ -21,7 +21,6 @@ export const LoginPage = () => {
   const authenticationService = new AuthenticationService();
 
   const login = () => {
-    console.log(username);
     authenticationService.LogIn(username, password).then((httpResult) => {
       if (httpResult?.status === HttpStatusCode.Created) {
         globalNavigate(PageRoute.HomePage);

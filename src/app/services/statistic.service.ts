@@ -4,8 +4,10 @@ import {
   LineChartResponse,
   PieChartRequest,
   PieChartResponse,
+  StatsData,
   URL_LINE_CHART,
   URL_PIE_CHART,
+  URL_STATS,
 } from "../models/statistic.model";
 import { DateToStringAPI } from "../utilities/format.utilities";
 
@@ -34,5 +36,10 @@ export class StatisticService {
         endDate: DateToStringAPI(endDate),
       },
     });
+  }
+
+  getStats() {
+    const urlRequest = URL_BASE + URL_STATS;
+    return this.httpService.get<StatsData>(urlRequest);
   }
 }
