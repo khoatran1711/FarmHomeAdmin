@@ -1,39 +1,38 @@
 @import "../../constants/colors.style.scss";
 
 .news-page {
+  width: 100vw;
+  height: 100vh;
+  background: var(--TimberGreen-color);
+
+  .page-container {
+    background: var(--TimberGreen-color);
     width: 100vw;
     height: 100vh;
-    background: var(--TimberGreen-color);
+    overflow: hidden;
+    display: flex;
 
-    .page-container {
-        background: var(--TimberGreen-color);
-        width: 100vw;
-        height: 100vh;
-        overflow: hidden;
-        display: flex;
+    .left-content {
+      margin: 15px;
 
-        .left-content {
-            margin: 15px;
-
-            .label {
-                font-size: 2vw;
-                color: var(--Solitaire-color);
-                font-family: "Intrepid";
-            }
-        }
-
-        .news-row {
-            display: flex;
-            flex-wrap: wrap;
-            flex-direction: row;
-            margin: 5px;
-        }
-
-        .news-column {
-            display: flex;
-            flex-wrap: wrap;
-            flex-direction: column;
-            margin: 5px;
-        }
+      .label {
+        font-size: 2vw;
+        color: var(--Solitaire-color);
+        font-family: "Intrepid";
+      }
     }
+
+    .news-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      margin: 5px;
+    }
+
+    .news-column {
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      margin: 5px;
+    }
+  }
 }

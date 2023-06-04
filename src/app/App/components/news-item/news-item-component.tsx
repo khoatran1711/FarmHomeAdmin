@@ -1,14 +1,8 @@
+import { News } from "../../../models/news.model";
 import "./news-item.style.scss";
 
 interface NewsItemProps {
   news?: News;
-}
-
-interface News {
-  date?: string;
-  imgUrl?: string;
-  name?: string;
-  merchantName?: string;
 }
 
 export const NewsItem = (props: NewsItemProps) => {
@@ -18,15 +12,15 @@ export const NewsItem = (props: NewsItemProps) => {
         <div
           className="container"
           style={{
-            backgroundImage: `url(${props?.news?.imgUrl})`,
+            backgroundImage: `url(${props?.news?.imageBanner})`,
           }}
         >
           <div className="cover">
             <div className="text">
               <label className="date">{props?.news?.date}</label>
               <div className="bottom-text">
-                <label className="name">{props?.news?.name}</label>
-                <label className="merchant">{props?.news?.merchantName}</label>
+                <label className="name">{props?.news?.title}</label>
+                <label className="merchant">{props?.news?.author}</label>
               </div>
             </div>
           </div>

@@ -129,20 +129,36 @@ export const HomePage = () => {
                     total={linechartTotal}
                   />
                 )}
-                {stats != null && (<>
-                  <div className="stats-items">
-                    <div className="stats-row">
-                      <StatItem src={merchant} label={stats.totalMerchant.toString() + " Merchants"} />
-                      <StatItem src={farmer} label={stats.totalFarmer.toString() + " Farmers"} />
-                    </div>
+                {stats != null && (
+                  <>
+                    <div className="stats-items">
+                      <div className="stats-row">
+                        <StatItem
+                          src={merchant}
+                          label={stats.totalMerchant.toString() + " Merchants"}
+                        />
+                        <StatItem
+                          src={farmer}
+                          label={stats.totalFarmer.toString() + " Farmers"}
+                        />
+                      </div>
 
-                    <div className="stats-row">
-                      <StatItem src={user} label={stats.totalUser.toString() + " Users"} />
-                      <StatItem src={newuser} label={stats.newThisMonth.toString() + " New users this month"} />
+                      <div className="stats-row">
+                        <StatItem
+                          src={user}
+                          label={stats.totalUser.toString() + " Users"}
+                        />
+                        <StatItem
+                          src={newuser}
+                          label={
+                            stats.newThisMonth.toString() +
+                            " New users this month"
+                          }
+                        />
+                      </div>
                     </div>
-                  </div>
-                </>)}
-
+                  </>
+                )}
               </section>
             </div>
           )}

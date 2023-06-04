@@ -1,7 +1,10 @@
+import { useEffect, useState } from "react";
+import { NewsService } from "../../services/news.service";
 import { I18n } from "../../translation";
 import { MenuBar } from "../components/menu-bar";
 import { NewsItem } from "../components/news-item";
 import "./news-page.style.scss";
+import { News } from "../../models/news.model";
 
 const news = {
   date: new Date()
@@ -19,6 +22,18 @@ const news = {
 };
 
 export const NewsPage = () => {
+  const [newsData, setNewsData] = useState<News[] | []>([]);
+
+  const newsService = new NewsService();
+  const getData = async () => {
+    const response = await newsService.getAllNews();
+    setNewsData(response?.data?.contents);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <>
       <div className="news-page">
@@ -28,21 +43,13 @@ export const NewsPage = () => {
             <MenuBar />
           </section>
           <div className="news-column">
-            <div className="news-row">
-              <NewsItem news={news} />
-              <NewsItem news={news} />
-              <NewsItem news={news} />
-            </div>
-            <div className="news-row">
-              <NewsItem news={news} />
-              <NewsItem news={news} />
-              <NewsItem news={news} />
-            </div>
-            <div className="news-row">
-              <NewsItem news={news} />
-              <NewsItem news={news} />
-              <NewsItem news={news} />
-            </div>
+            {newsData?.length != 0 && (
+              <div className="news-row">
+                {newsData?.map((item, index) => (
+                  <NewsItem news={item} />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
