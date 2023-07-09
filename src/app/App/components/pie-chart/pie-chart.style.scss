@@ -1,0 +1,15 @@
+@import "../../../constants/colors.style.scss";
+
+.piechartpopup {
+  color: var(--Solitaire-color);
+
+  .rdp {
+    color: var(--TimberGreen-color);
+    .rdp-cell {
+      color: var(--TimberGreen-color);
+    }
+    .rdp-day_selected {
+      background-color: var(--Finlandia-color);
+    }
+  }
+}

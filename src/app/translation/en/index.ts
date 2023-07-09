@@ -72,4 +72,6 @@ export const EN = {
   Turnip: "Turnip",
   Watermelon: "Watermelon",
   total: "Total",
+  from: "From",
+  to: "To",
 };

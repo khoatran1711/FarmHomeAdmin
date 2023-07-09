@@ -3,9 +3,14 @@ import { StatisticData } from "./statistic.model";
 export const URL_STATISTIC_USER = "admin/statistic/user";
 export const URL_STATISTIC_DATE = "admin/statistic/date";
 
-export interface StatisticUserResponse {
+export interface StatisticUsersResponse {
   farmer: UserStatistic[];
   merchant: UserStatistic[];
+  summary: number;
+}
+
+export interface StatisticUserResponse {
+  data: UserStatistic[];
   summary: number;
 }
 

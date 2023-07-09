@@ -29,6 +29,13 @@
       padding-right: 3%;
     }
 
+    .category-icons {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+      margin-top: 2vw;
+      margin-bottom: 2vw;
+    }
+
     .category-card {
       width: 180px;
       height: 170px;
@@ -40,14 +47,13 @@
       position: relative;
 
       .img-background {
-        width: 100%;
-        height: 100%;
+        width: 75%;
+        height: 75%;
         position: absolute;
         z-index: 0;
       }
 
       .black-block {
-        background: #00000060;
         height: 100%;
         align-self: end;
         width: 70px;
@@ -60,11 +66,58 @@
           padding: 10px 15px;
           background: var(--Finlandia-color);
           color: var(--Solitaire-color);
-          margin-right: -30px;
+          margin-right: 10px;
           margin-bottom: 20px;
           font-weight: 600;
         }
       }
+    }
+  }
+  .fruit {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    margin-left: -1.5vw;
+  }
+
+  .fruit-card {
+    margin: 1.5vw;
+
+    .info {
+      width: 15vw;
+      height: 6.5vw;
+      background-color: var(--SpanishGreen-color);
+      border-radius: 10px;
+      padding-top: 0.5vw;
+
+      .info-container {
+        margin-left: 6.2vw;
+        padding-left: 1vw;
+        border-left: 1px solid var(--Solitaire-color);
+        height: 5.5vw;
+        overflow: hidden;
+
+        .label {
+          color: var(--Solitaire-color);
+          font-family: "Intrepid";
+
+          &.big {
+            font-size: 1.2vw;
+          }
+
+          &.small {
+            font-size: 0.7vw;
+          }
+        }
+      }
+    }
+
+    .image {
+      width: 7vw;
+      height: 7vw;
+      border-radius: 1000px;
+      overflow: hidden;
+      margin-top: -5.5vw;
+      margin-left: -1.5vw;
     }
   }
 }

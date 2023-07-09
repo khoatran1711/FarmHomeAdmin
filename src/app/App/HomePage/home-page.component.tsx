@@ -87,7 +87,6 @@ export const HomePage = () => {
 
     const requestStatsData = await statisticService.getStats();
     setStats(requestStatsData?.data);
-    console.log(stats);
   };
 
   useEffect(() => {
@@ -114,11 +113,13 @@ export const HomePage = () => {
                   data={farmerData}
                   total={total}
                   colors={farmerColor}
+                  isFarmer={true}
                 />
                 <PieChart
                   data={merchantData}
                   total={total}
                   colors={merchantColor}
+                  isFarmer={false}
                 />
               </section>
 

@@ -9,6 +9,7 @@ interface TotalLabelProps {
   viewDetail?: boolean;
   isPie?: boolean;
   total?: number;
+  isFarmer?: boolean;
 }
 
 export const TotalLabel = (props?: TotalLabelProps) => {
@@ -84,7 +85,11 @@ export const TotalLabel = (props?: TotalLabelProps) => {
                 left: 0,
               }}
             >
-              {props?.isPie ? <PieChartPopUp /> : <LineChartPopUp />}
+              {props?.isPie ? (
+                <PieChartPopUp isFarmer={props?.isFarmer} />
+              ) : (
+                <LineChartPopUp />
+              )}
             </div>
           </Popup>
         )}

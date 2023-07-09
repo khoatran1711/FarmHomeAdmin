@@ -1,5 +1,3 @@
-import { Colors } from "../../constants";
-import loginBackground from "../../assets/backgrounds/login-background.png";
 import blockButton from "../../assets/icons/block-user.png";
 import unblockButton from "../../assets/icons/un-block-user.png";
 import "./merchant-detail-page.style.scss";
@@ -9,15 +7,33 @@ import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { MerchantDetailService } from "../../services/merchant-detail.service";
 import { GetMerchantDetailResponse } from "../../models/merchant-detail.model";
+import { FarmerDetailService } from "../../services/farmer-detail.service";
 
 export const MerchantDetailPage = () => {
   const location = useLocation();
   const merchantDetailService = new MerchantDetailService();
+  const farmerDetailService = new FarmerDetailService();
 
   const stateData = location?.state?.data;
 
   const [data, setData] = useState<GetMerchantDetailResponse | null>(null);
   const [showTransactions, setShowTransactions] = useState<boolean>(true);
+
+  const changeUserStatus = async () => {
+    const shouldChange = window.confirm(
+      "Are you sure you want to block/unblock this user?"
+    );
+    if (shouldChange) {
+      const request = await farmerDetailService.changeUserStatus(
+        data?.user ? data?.user?.username : "",
+        "Testing"
+      );
+      const responseData = request?.data;
+      request?.data?.success
+        ? window.location.reload()
+        : console.log(responseData);
+    }
+  };
 
   const toggleTrueFalse = (
     value: boolean,
@@ -56,6 +72,7 @@ export const MerchantDetailPage = () => {
                 alt=""
                 src={data?.user?.status?.id == 1 ? blockButton : unblockButton}
                 style={{ width: "100%", height: "100%" }}
+                onClick={changeUserStatus}
               />
             </div>
             <div className="merchant-info">

@@ -2,7 +2,6 @@ import { RootStore, RootStoreType } from "../../domain";
 import { HttpService, URL_BASE } from "../../services";
 import {
   LineChartResponse,
-  PieChartRequest,
   PieChartResponse,
   StatsData,
   URL_LINE_CHART,

@@ -1,12 +1,18 @@
 import { LoadingButton } from "@mui/lab";
 import { ResponsivePie } from "@nivo/pie";
 import { format } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DateRange, DayPicker } from "react-day-picker";
 import { Colors } from "../../../constants";
 import { TotalLabel } from "../total-label";
 import { CategoryColors } from "../../../constants/category-colors.constants";
-import { PieChartData } from "../../../models/chart.model";
+import {
+  PieChartData,
+  StatisticUserResponse,
+} from "../../../models/chart.model";
+import { ChartService } from "../../../services/chart.service";
+import { HttpResult } from "../../../../services";
+import "./pie-chart.style.scss";
 
 const pieDate = [
   {
@@ -45,12 +51,18 @@ interface PieChartProps {
   data: PieChartData[];
   total: number;
   colors: [];
+  isFarmer: boolean;
 }
 
 export const PieChart = (props: PieChartProps) => {
   return (
     <div className="pie-chart">
-      <TotalLabel viewDetail={true} isPie={true} total={props?.total} />
+      <TotalLabel
+        viewDetail={true}
+        isPie={true}
+        total={props?.total}
+        isFarmer={props?.isFarmer}
+      />
       <div className="pie-chart container">
         <div className="pie-chart chart">
           <ResponsivePie
@@ -89,32 +101,96 @@ export const PieChart = (props: PieChartProps) => {
   );
 };
 
-export const PieChartPopUp = () => {
-  const [isShowDatePicker, setIsShowDatePicker] = useState(false);
-  const [range, setRange] = useState<DateRange | undefined>();
+interface PieChartPopUpProps {
+  isFarmer?: Boolean;
+}
 
-  const data = [
-    { name: "Anom", age: 19, gender: "Male" },
-    { name: "Megha", age: 19, gender: "Female" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e1" },
-  ];
+export const PieChartPopUp = (props: PieChartPopUpProps) => {
+  const chartService = new ChartService();
+  const previous14Day = new Date();
+  previous14Day.setDate(previous14Day.getDate() - 14);
+
+  const [data, setData] = useState<PieChartData[]>([]);
+  const [color, setColor] = useState<[]>([]);
+  const [total, setTotal] = useState<number>(0);
+  const [isShowDatePicker, setIsShowDatePicker] = useState(false);
+  const [range, setRange] = useState<DateRange | undefined>({
+    from: previous14Day,
+    to: new Date(),
+  });
+
+  function getRandomHexColor(value: number) {
+    const seed = value % 1307; // Limit the seed to a smaller range
+    const random = Math.abs(Math.sin(seed) * 16777215); // Generate a random number between 0 and 16777215 (0xFFFFFF)
+    const hexColor = "#" + Math.floor(random).toString(16).padStart(6, "0"); // Convert the random number to hexadecimal format
+
+    return hexColor;
+  }
+
+  const getCurrentDateMinus = (days: number) => {
+    const date = new Date();
+    date.setDate(date.getDate() - days);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  const convertToDateFormat = (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  const onFindClick = () => {
+    const endDate = range?.to
+      ? convertToDateFormat(range?.to)
+      : getCurrentDateMinus(0);
+    const startDate = range?.from
+      ? convertToDateFormat(range?.from)
+      : getCurrentDateMinus(7);
+
+    callAPI(startDate, endDate);
+  };
+
+  const callAPI = async (startDate: string, endDate: string) => {
+    let request: HttpResult<StatisticUserResponse>;
+
+    if (props?.isFarmer) {
+      request = await chartService.statisticFarmerByDate(startDate, endDate);
+    } else {
+      request = await chartService.statisticMerchantByDate(startDate, endDate);
+    }
+
+    const user = request?.data?.data;
+
+    setTotal(request?.data?.summary);
+
+    const pieData: any = [];
+    const colors: any = [];
+    user?.map((item) => {
+      const data = {
+        id: item?.lastName + " " + item?.firstName,
+        value: item?.total,
+      };
+      colors.push(getRandomHexColor(item?.total));
+      pieData.push(data);
+    });
+    setColor(colors);
+    setData(pieData);
+  };
+
+  const getData = () => {
+    const startDate = getCurrentDateMinus(14);
+    const endDate = getCurrentDateMinus(0);
+
+    callAPI(startDate, endDate);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   let footer = (
     <LoadingButton
@@ -129,7 +205,7 @@ export const PieChartPopUp = () => {
   );
 
   return (
-    <>
+    <div className="piechartpopup">
       <div
         className="date-pick"
         style={{
@@ -166,7 +242,7 @@ export const PieChartPopUp = () => {
             variant="contained"
             disabled={range?.from && range?.to ? false : true}
             className="pie-chart-popup button find"
-            onClick={() => console.log("aa")}
+            onClick={() => onFindClick()}
           >
             Find
           </LoadingButton>
@@ -191,7 +267,8 @@ export const PieChartPopUp = () => {
           <div className="chart-table-container pie-chart container">
             <div className="chart-table-container pie-chart chart">
               <ResponsivePie
-                data={pieDate}
+                data={data}
+                colors={color}
                 margin={{ right: 10, left: 10 }}
                 startAngle={-180}
                 innerRadius={0.3}
@@ -214,6 +291,11 @@ export const PieChartPopUp = () => {
                 }}
               />
             </div>
+            <div>
+              {data?.map((item, index) => (
+                <LegendLabel label={item?.id} color={color[index]} />
+              ))}
+            </div>
           </div>
           <div
             style={{
@@ -222,16 +304,7 @@ export const PieChartPopUp = () => {
               justifyContent: "center",
               alignItems: "center",
             }}
-          >
-            <LegendLabel />
-            <LegendLabel />
-            <LegendLabel />
-            <LegendLabel />
-            <LegendLabel />
-            <LegendLabel />
-            <LegendLabel />
-            <LegendLabel />
-          </div>
+          ></div>
         </div>
 
         <div>
@@ -239,21 +312,19 @@ export const PieChartPopUp = () => {
             <table>
               <tr>
                 <th>Name</th>
-                <th>Age</th>
-                <th>Gender</th>
+                <th>Value</th>
               </tr>
-              {data.map((val, key) => {
+              {data?.map((item, index) => {
                 return (
-                  <tr key={key}>
-                    <td>{val.name}</td>
-                    <td>{val.age}</td>
-                    <td>{val.gender}</td>
+                  <tr key={"key"}>
+                    <td>{item?.id}</td>
+                    <td>{item?.value}</td>
                   </tr>
                 );
               })}
             </table>
           </div>
-          <TotalLabel />
+          <TotalLabel total={total} />
         </div>
       </div>
 
@@ -265,15 +336,15 @@ export const PieChartPopUp = () => {
             right: 0,
             background: Colors.Solitaire,
           }}
-          defaultMonth={new Date(2022, 8)}
+          defaultMonth={new Date(2023, 6)}
           mode="range"
-          max={6}
+          max={30}
           selected={range}
           onSelect={setRange}
           footer={footer}
         />
       )}
-    </>
+    </div>
   );
 };
 

@@ -4,14 +4,28 @@ import "./reports-page.style.scss";
 import deleteIcon from "../../assets/icons/delete-icon.png";
 import { LoadingButton } from "@mui/lab";
 import { DayPicker } from "react-day-picker";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "react-day-picker/dist/style.css";
 import { DateToDateString } from "../../utilities/format.utilities";
 import { I18n } from "../../translation";
+import { ReportService } from "../../services/report.service";
+import { Report } from "../../models/report.model";
 
 export const ReportsPage = () => {
+  const reportService = new ReportService();
+
+  const [data, setData] = useState<Report[]>([]);
   const [isShowDatePicker, setIsShowDatePicker] = useState(false);
   const [date, setDate] = useState<Date>(new Date());
+
+  const getData = async () => {
+    const response = await reportService.getAllReport();
+    setData(response?.data?.contents);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <div className="reports-page">
@@ -64,71 +78,79 @@ export const ReportsPage = () => {
               />
             )}
           </div>
-          <ReportCard id={1} />
-          <ReportCard id={2} />
+          {data?.map((item) => (
+            <>
+              <ReportCard report={item} />
+            </>
+          ))}
         </section>
       </div>
     </div>
   );
 };
 
-const ReportCard = ({ id }: { id: number }) => {
+interface ReportCardProps {
+  report: Report;
+}
+
+const ReportCard = (props: ReportCardProps) => {
   return (
     <div className="report-card">
-      <label htmlFor={`post-${id}`}>
+      <label htmlFor={`post-${props?.report?.id}`}>
         <div className="report-card-title">
-          <p className="title">TITLE</p>
+          <p className="title">{props?.report?.title}</p>
 
-          <p className="small-title">24/03/2023 10:30</p>
+          <p className="small-title">{props?.report?.date}</p>
         </div>
       </label>
 
-      <input type="checkbox" className="read-more-state" id={`post-${id}`} />
+      <input
+        type="checkbox"
+        className="read-more-state"
+        id={`post-${props?.report?.id}`}
+      />
 
       <div className="read-more-wrap">
         <div className="read-more-target">
           <div className="report-card-content">
             <div className="info">
               <div className="content-info">
-                <div className="info-label">{I18n.reporter}</div>
-                <div className="info-content">ALA AHTA SEIKO</div>
+                <div className="info-label">{I18n.from}</div>
+                <div className="info-content">
+                  {props?.report?.merchant?.firstName +
+                    " " +
+                    props?.report?.merchant?.lastName}
+                </div>
               </div>
 
               <div className="content-info">
-                <div className="info-label">{I18n.phone}</div>
-                <div className="info-content">0908851760</div>
+                <div className="info-label">{I18n.username}</div>
+                <div className="info-content">
+                  {props?.report?.merchant?.username}
+                </div>
               </div>
 
               <div className="content-info">
-                <div className="info-label">{I18n.mail}</div>
-                <div className="info-content">test@gmail.com</div>
+                <div className="info-label">{I18n.to}</div>
+                <div className="info-content">
+                  {props?.report?.farmer?.firstName +
+                    " " +
+                    props?.report?.farmer?.lastName}
+                </div>
+              </div>
+
+              <div className="content-info">
+                <div className="info-label">{I18n.username}</div>
+                <div className="info-content">
+                  {props?.report?.farmer?.username}
+                </div>
               </div>
             </div>
 
             <div className="content">
               <div className="content-label">{I18n.content}</div>
 
-              <div className="content-content">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Dolores, tempora vitae? Possimus natus eius maxime culpa
-                corporis nisi nam iusto odio velit porro at nostrum quidem nihil
-                earum aut, ad neque obcaecati id voluptatibus excepturi
-                dignissimos facilis qui? Odit hic recusandae molestias deserunt
-                quidem, architecto dicta maxime tempore totam mollitia,
-                perspiciatis voluptas suscipit repellat vitae fugiat quae ad
-                excepturi nemo. Tempore expedita ipsum explicabo doloribus
-                cumque similique nulla laborum. Sint, ducimus! Labore cum cumque
-                sapiente suscipit modi tempora excepturi velit dicta laborum
-                delectus? Commodi porro ratione nihil iusto tenetur labore atque
-                ducimus aspernatur alias obcaecati aut nulla consectetur, quidem
-                iste perferendis a perspiciatis earum omnis ipsa eaque, cumque
-                sequi eligendi? Repellendus tenetur unde nemo nulla provident
-                accusantium laudantium corporis error ea dolorem molestiae
-                maiores neque at quisquam harum omnis quo laborum, accusamus
-                iste! Delectus repudiandae unde vero, minus ea excepturi iusto
-                doloribus aliquid labore molestias magnam provident quasi earum
-                commodi fugit recusandae ullam placeat impedit quidem eos.
-              </div>
+              <div className="content-content">{props?.report?.content}</div>
 
               <div className="delete-icon">
                 <img

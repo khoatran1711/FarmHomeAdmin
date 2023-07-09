@@ -3,62 +3,34 @@ import { Colors } from "../../../constants";
 import { format } from "date-fns";
 import { DateRange, DayPicker } from "react-day-picker";
 import { LoadingButton } from "@mui/lab";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TotalLabel } from "../total-label";
-import { CategoryColors } from "../../../constants/category-colors.constants";
 import { LineChartData } from "../../../models/chart.model";
+import { ChartService } from "../../../services/chart.service";
+import "./line-chart.style.scss";
 
 interface LineChartProps {
   data: LineChartData[];
   total: number;
 }
 
-const line_data = [
-  {
-    id: "user",
-    data: [
-      {
-        x: "plane",
-        y: 275,
-      },
-      {
-        x: "helicopter",
-        y: 261,
-      },
-      {
-        x: "boat",
-        y: 267,
-      },
-      {
-        x: "train",
-        y: 105,
-      },
-      {
-        x: "subway",
-        y: 91,
-      },
-      {
-        x: "bus",
-        y: 16,
-      },
-      {
-        x: "car",
-        y: 184,
-      },
-      {
-        x: "discord",
-        y: 50,
-      },
-    ],
+const theme = {
+  tooltip: {
+    container: {
+      background: "#fff", // Change the background color of the tooltip
+      color: "#000", // Change the text color of the tooltip
+      border: "1px solid #333", // Change the border color of the tooltip
+    },
   },
-];
+};
 
 export const LineChart = (props: LineChartProps) => {
   return (
     <div className="line-chart">
       <TotalLabel viewDetail={true} total={props?.total} />
       <ResponsiveLine
-        data={props.data}
+        data={props?.data}
+        theme={theme}
         margin={{ top: 10, right: 40, bottom: 40, left: 40 }}
         yScale={{
           type: "linear",
@@ -72,7 +44,7 @@ export const LineChart = (props: LineChartProps) => {
         enableGridX={false}
         enableGridY={false}
         axisRight={null}
-        colors={{ scheme: "yellow_green" }}
+        colors={Colors.Solitaire}
         axisLeft={{
           tickSize: 10,
           tickPadding: 5,
@@ -101,7 +73,7 @@ export const LineChart = (props: LineChartProps) => {
         pointColor={{ theme: "background" }}
         pointBorderWidth={2}
         pointLabelYOffset={-12}
-        enableArea={true}
+        enableArea={false}
         areaOpacity={0.8}
         useMesh={true}
         axisBottom={{
@@ -135,31 +107,79 @@ export const LineChart = (props: LineChartProps) => {
 };
 
 export const LineChartPopUp = () => {
-  const [isShowDatePicker, setIsShowDatePicker] = useState(false);
-  const [range, setRange] = useState<DateRange | undefined>();
+  const chartService = new ChartService();
+  const previous14Day = new Date();
+  previous14Day.setDate(previous14Day.getDate() - 14);
 
-  const data = [
-    { name: "Anom", age: 19, gender: "Male" },
-    { name: "Megha", age: 19, gender: "Female" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Male" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e" },
-    { name: "Subham", age: 25, gender: "Mal12222e1" },
-  ];
+  const [data, setData] = useState<LineChartData[]>([]);
+  const [total, setTotal] = useState<number>(0);
+  const [isShowDatePicker, setIsShowDatePicker] = useState(false);
+  const [range, setRange] = useState<DateRange | undefined>({
+    from: previous14Day,
+    to: new Date(),
+  });
+
+  const getCurrentDateMinus = (days: number) => {
+    const date = new Date();
+    date.setDate(date.getDate() - days);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  const convertToDateFormat = (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  const onFindClick = () => {
+    const endDate = range?.to
+      ? convertToDateFormat(range?.to)
+      : getCurrentDateMinus(0);
+    const startDate = range?.from
+      ? convertToDateFormat(range?.from)
+      : getCurrentDateMinus(7);
+
+    callAPI(startDate, endDate);
+  };
+
+  const callAPI = async (startDate: string, endDate: string) => {
+    const request = await chartService.statisticProductByDateRange(
+      startDate,
+      endDate
+    );
+    const line = request?.data?.data;
+    setTotal(request?.data?.summary);
+
+    const dateData: any = [];
+    line?.map((item) => {
+      const date = new Date(item?.date);
+      const data = {
+        date: item?.date,
+        x: date.getDate().toString() + "-" + (date.getMonth() + 1).toString(),
+        y: item?.total,
+      };
+      dateData.push(data);
+    });
+    const lineData: LineChartData[] = [{ id: "test", data: dateData }];
+
+    setData(lineData);
+  };
+
+  const getData = async () => {
+    const startDate = getCurrentDateMinus(14);
+    const endDate = getCurrentDateMinus(0);
+
+    console.log(startDate);
+    await callAPI(startDate, endDate);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   let footer = (
     <LoadingButton
@@ -174,7 +194,7 @@ export const LineChartPopUp = () => {
   );
 
   return (
-    <>
+    <div className="linechartpopup">
       <div
         className="date-pick"
         style={{
@@ -203,7 +223,7 @@ export const LineChartPopUp = () => {
             variant="contained"
             disabled={range?.from && range?.to ? false : true}
             className="pie-chart-popup button find"
-            onClick={() => console.log("aa")}
+            onClick={() => onFindClick()}
           >
             Find
           </LoadingButton>
@@ -225,7 +245,8 @@ export const LineChartPopUp = () => {
           <div className="chart-table-container line-chart container">
             <div className="chart-table-container line-chart chart">
               <ResponsiveLine
-                data={line_data}
+                data={data}
+                theme={theme}
                 margin={{ top: 10, right: 40, bottom: 40, left: 40 }}
                 yScale={{
                   type: "linear",
@@ -239,7 +260,7 @@ export const LineChartPopUp = () => {
                 enableGridX={false}
                 enableGridY={false}
                 axisRight={null}
-                colors={{ scheme: "yellow_green" }}
+                colors={Colors.Solitaire}
                 axisLeft={{
                   tickSize: 10,
                   tickPadding: 5,
@@ -271,7 +292,7 @@ export const LineChartPopUp = () => {
                 pointColor={{ theme: "background" }}
                 pointBorderWidth={2}
                 pointLabelYOffset={-12}
-                enableArea={true}
+                enableArea={false}
                 areaOpacity={0.8}
                 useMesh={true}
                 axisBottom={{
@@ -311,22 +332,20 @@ export const LineChartPopUp = () => {
           <div className="table-container">
             <table>
               <tr>
-                <th>Name</th>
-                <th>Age</th>
-                <th>Gender</th>
+                <th>Date</th>
+                <th>Total</th>
               </tr>
-              {data.map((val, key) => {
+              {data[0]?.data?.map((item, index) => {
                 return (
-                  <tr key={key}>
-                    <td>{val.name}</td>
-                    <td>{val.age}</td>
-                    <td>{val.gender}</td>
+                  <tr key={index}>
+                    <td>{item?.x}</td>
+                    <td>{item?.y}</td>
                   </tr>
                 );
               })}
             </table>
           </div>
-          <TotalLabel />
+          <TotalLabel total={total} />
         </div>
       </div>
 
@@ -338,14 +357,14 @@ export const LineChartPopUp = () => {
             right: 0,
             background: Colors.Solitaire,
           }}
-          defaultMonth={new Date(2022, 8)}
+          defaultMonth={new Date(2023, 6)}
           mode="range"
-          max={6}
+          max={30}
           selected={range}
           onSelect={setRange}
           footer={footer}
         />
       )}
-    </>
+    </div>
   );
 };
